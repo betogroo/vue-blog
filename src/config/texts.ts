@@ -1,1 +1,1 @@
-export const APP_TITLE = 'Vue Login'
+export const APP_TITLE = 'VuetiFlog'
