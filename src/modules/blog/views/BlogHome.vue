@@ -1,11 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { PostForm } from '../components'
+</script>
 <template>
-  <v-container class="d-flex justify-center fill-height">
-    <v-responsive
-      class="text-center"
-      max-width="600"
-    >
+  <v-container class="d-flex justify-center">
+    <div class="ma-2 pa-3">
       <h1 class="text-center text-h3">VuetiFlog - HOME PAGE</h1>
-    </v-responsive>
+      <PostForm />
+    </div>
   </v-container>
 </template>
