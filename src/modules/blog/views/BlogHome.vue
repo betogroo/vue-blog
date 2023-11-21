@@ -3,11 +3,18 @@ import { PostForm, PostCard } from '../components'
 import { Post } from '../types/Blog'
 import { usePost } from '../composables'
 import { onBeforeMount } from 'vue'
+import { useProfileStore } from '@/modules/auth/store/useProfileStore'
 
-const { fetchPosts, isPending: fetchPostsPending, posts } = usePost()
+const { fetchPosts, addPost, isPending: fetchPostsPending, posts } = usePost()
+const profileStore = useProfileStore()
 
-const submitPost = (post: Post) => {
-  console.log(post)
+const submitPost = async (post: Post) => {
+  const user_id = profileStore.userProfile.id
+  try {
+    await addPost(post, user_id)
+  } catch (err) {
+    console.log('BlogHome', err)
+  }
 }
 onBeforeMount(async () => {
   await fetchPosts()

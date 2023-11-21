@@ -1,7 +1,11 @@
 import { ref } from 'vue'
 import { useHelpers } from '@/shared/composables'
 import { supabase } from '@/plugins/supabase'
-import { type PostWithProfile, PostsWithProfileSchema } from '../types/Blog'
+import {
+  type PostWithProfile,
+  type Post,
+  PostsWithProfileSchema,
+} from '../types/Blog'
 
 const posts = ref<PostWithProfile[]>([])
 
@@ -35,7 +39,24 @@ const usePost = () => {
       isPending.value = false
     }
   }
-  return { isPending, error, posts, fetchPosts }
+
+  const addPost = async (post: Post, user_id: string) => {
+    try {
+      const postData = { ...post, user_id }
+      await clearErrorAndSetPending()
+      const { data, error: err } = await supabase
+        .from('post')
+        .insert(postData)
+        .select()
+      if (err || !data) throw Error('Não foi possível postar')
+      return data
+    } catch (err) {
+      error.value = handleError(err)
+    } finally {
+      isPending.value = false
+    }
+  }
+  return { isPending, error, posts, addPost, fetchPosts }
 }
 
 export default usePost

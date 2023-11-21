@@ -8,7 +8,7 @@ const routes: CustomRouteRecordRaw[] = [
     name: 'BlogHome',
     meta: {
       title: 'Blog',
-      requiresAuth: true,
+      requiresAuth: false,
     },
   },
 ]
