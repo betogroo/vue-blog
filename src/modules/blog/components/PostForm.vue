@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { type Post, validationPostSchema } from '../types/Blog'
 import { useField, useForm } from 'vee-validate'
+interface Props {
+  isPending: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  isPending: false,
+})
 
 const emit = defineEmits<{
   submitPost: [post: Post]
@@ -43,6 +49,7 @@ const onSubmit = handleSubmit(async () => {
         <v-btn
           class="text-right"
           :disabled="!meta.valid"
+          :loading="isPending"
           type="submit"
           >Enviar</v-btn
         >

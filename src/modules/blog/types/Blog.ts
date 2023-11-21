@@ -7,6 +7,7 @@ export const PostSchema = z.object({
   title: z.string().min(1, 'Campo obrigatório').max(100, 'Máximo 100 letras'),
   text: z.string().min(1, 'Campo obrigatório').max(500, 'Máximo 500 letras'),
   created_at: z.string().nullish(),
+  user_id: z.string().nullish(),
 })
 
 export const PostsSchema = z.array(PostSchema)
