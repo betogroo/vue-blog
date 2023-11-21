@@ -5,7 +5,13 @@ import { usePost } from '../composables'
 import { onBeforeMount } from 'vue'
 import { useProfileStore } from '@/modules/auth/store/useProfileStore'
 
-const { fetchPosts, addPost, isPending: fetchPostsPending, posts } = usePost()
+const {
+  addPost,
+  deletePost: _deletePost,
+  fetchPosts,
+  isPending: fetchPostsPending,
+  posts,
+} = usePost()
 const profileStore = useProfileStore()
 
 const submitPost = async (post: Post) => {
@@ -14,6 +20,14 @@ const submitPost = async (post: Post) => {
     await addPost(post, user_id)
   } catch (err) {
     console.log('BlogHome', err)
+  }
+}
+
+const deletePost = async (id: number) => {
+  try {
+    await _deletePost(id)
+  } catch (error) {
+    console.error('deletePost', error)
   }
 }
 onBeforeMount(async () => {
@@ -28,6 +42,7 @@ onBeforeMount(async () => {
       v-for="post in posts"
       :key="post.id!"
       :post="post"
+      @handle-delete="(id) => deletePost(id)"
     />
     <PostForm
       :is-pending="fetchPostsPending"
