@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
+import { ProfileSchema } from '@/modules/auth/types/Profile'
 
 export const PostSchema = z.object({
   id: z.number().nullish(),
@@ -9,8 +10,13 @@ export const PostSchema = z.object({
 })
 
 export const PostsSchema = z.array(PostSchema)
+export const PostWithProfileSchema = PostSchema.extend({
+  profiles: ProfileSchema,
+})
+export const PostsWithProfileSchema = z.array(PostWithProfileSchema)
 
 export const validationPostSchema = toTypedSchema(PostSchema)
 
 export type Post = z.infer<typeof PostSchema>
 export type Posts = z.infer<typeof PostsSchema>
+export type PostsWithProfile = z.infer<typeof PostsWithProfileSchema>

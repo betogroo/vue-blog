@@ -1,9 +1,9 @@
 import { ref } from 'vue'
 import { useHelpers } from '@/shared/composables'
 import { supabase } from '@/plugins/supabase'
-import { type Post, PostsSchema } from '../types/Blog'
+import { type PostsWithProfile, PostsWithProfileSchema } from '../types/Blog'
 
-const posts = ref<Post[]>([])
+const posts = ref<PostsWithProfile>([])
 
 const { delay, handleError } = useHelpers()
 
@@ -20,10 +20,14 @@ const usePost = () => {
   const fetchPosts = async () => {
     try {
       await clearErrorAndSetPending()
-      const { data, error: err } = await supabase.from('post').select()
+      //const { data, error: err } = await supabase.from('post').select()
+      const { data, error: err } = await supabase
+        .from('post')
+        .select('title, text, created_at, profiles(username)')
+
       if (err) throw err
       if (data) {
-        const parsedData = PostsSchema.parse(data)
+        const parsedData = PostsWithProfileSchema.parse(data)
         posts.value = parsedData
       }
     } catch (err) {
