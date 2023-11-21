@@ -1,0 +1,52 @@
+<script setup lang="ts">
+import { type Post, validationPostSchema } from '../types/Blog'
+import { useField, useForm } from 'vee-validate'
+
+const emit = defineEmits<{
+  submitPost: [post: Post]
+}>()
+
+const { values, handleSubmit, meta } = useForm<Post>({
+  validationSchema: validationPostSchema,
+})
+
+const title = useField('title', validationPostSchema)
+const text = useField('text', validationPostSchema)
+
+const onSubmit = handleSubmit(async () => {
+  emit('submitPost', values)
+})
+</script>
+
+<template>
+  <v-form @submit.prevent="onSubmit">
+    <v-row no-gutters>
+      <v-col cols="12">
+        <v-text-field
+          v-model="title.value.value"
+          :error-messages="title.errorMessage.value"
+          label="Assunto"
+          placeholder="Digite o assunto"
+          variant="outlined"
+        />
+      </v-col>
+      <v-col cols="12">
+        <v-textarea
+          v-model="text.value.value"
+          clearable
+          :error-messages="text.errorMessage.value"
+          label="Label"
+          variant="outlined"
+        ></v-textarea>
+      </v-col>
+      <v-col class="d-flex justify-end">
+        <v-btn
+          class="text-right"
+          :disabled="!meta.valid"
+          type="submit"
+          >Enviar</v-btn
+        >
+      </v-col>
+    </v-row>
+  </v-form>
+</template>
