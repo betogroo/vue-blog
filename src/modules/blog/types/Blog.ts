@@ -18,5 +18,4 @@ export const PostsWithProfileSchema = z.array(PostWithProfileSchema)
 export const validationPostSchema = toTypedSchema(PostSchema)
 
 export type Post = z.infer<typeof PostSchema>
-export type Posts = z.infer<typeof PostsSchema>
-export type PostsWithProfile = z.infer<typeof PostsWithProfileSchema>
+export type PostWithProfile = z.infer<typeof PostWithProfileSchema>
