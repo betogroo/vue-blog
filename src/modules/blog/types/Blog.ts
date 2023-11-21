@@ -8,6 +8,9 @@ export const PostSchema = z.object({
   created_at: z.string().nullish(),
 })
 
+export const PostsSchema = z.array(PostSchema)
+
 export const validationPostSchema = toTypedSchema(PostSchema)
 
 export type Post = z.infer<typeof PostSchema>
+export type Posts = z.infer<typeof PostsSchema>
