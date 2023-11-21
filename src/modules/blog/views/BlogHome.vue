@@ -23,11 +23,15 @@ onBeforeMount(async () => {
 <template>
   <v-container class="d-flex flex-column justify-center">
     <h1 class="text-center text-h3">VuetiFlog - HOME PAGE</h1>
+    <h1 v-if="!posts.length">Nada a mostrar</h1>
     <PostCard
       v-for="post in posts"
       :key="post.id!"
       :post="post"
     />
-    <PostForm @submit-post="(post) => submitPost(post)" />
+    <PostForm
+      :is-pending="fetchPostsPending"
+      @submit-post="(post) => submitPost(post)"
+    />
   </v-container>
 </template>
