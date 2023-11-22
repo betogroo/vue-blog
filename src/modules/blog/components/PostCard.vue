@@ -4,8 +4,14 @@ import { PostWithProfile } from '../types/Blog'
 
 interface Props {
   post: PostWithProfile
+  user_id: string
+  isPending?: boolean
 }
-const props = defineProps<Props>()
+
+const props = withDefaults(defineProps<Props>(), {
+  isPending: false,
+})
+
 const emit = defineEmits<{
   handleDelete: [id: number]
 }>()
@@ -23,7 +29,12 @@ const handleDelete = (id: number) => {
     <v-card-subtitle>{{ created_at }}</v-card-subtitle>
     <v-card-text>{{ text }}</v-card-text>
     <v-card-actions>
-      <v-btn @click="handleDelete(id!)">Excluir</v-btn>
+      <v-btn
+        v-if="user_id === post.profiles.id"
+        :loading="isPending"
+        @click="handleDelete(id!)"
+        >Excluir</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
