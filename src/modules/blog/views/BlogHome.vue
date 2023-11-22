@@ -37,8 +37,8 @@ const deletePost = async (id: number) => {
   }
 }
 
-const editPost = (id: number) => {
-  _editPost(id)
+const editPost = async (id: number) => {
+  await _editPost(id)
 }
 onBeforeMount(async () => {
   await fetchPosts()
