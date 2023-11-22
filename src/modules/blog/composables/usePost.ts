@@ -56,7 +56,18 @@ const usePost = () => {
       isPending.value = false
     }
   }
-  return { isPending, error, posts, addPost, fetchPosts }
+  const deletePost = async (id: number) => {
+    try {
+      await clearErrorAndSetPending()
+      const { error: err } = await supabase.from('post').delete().eq('id', id)
+      if (err) throw err
+    } catch (err) {
+      error.value = handleError(err)
+    } finally {
+      isPending.value = false
+    }
+  }
+  return { isPending, error, posts, addPost, deletePost, fetchPosts }
 }
 
 export default usePost
