@@ -46,7 +46,6 @@ onBeforeMount(async () => {
 </script>
 <template>
   <v-container class="d-flex flex-column justify-center">
-    <h1 class="text-center text-h3">VuetiFlog - HOME PAGE</h1>
     <h1 v-if="!posts.length">Nada a mostrar</h1>
     <PostCard
       v-for="(post, i) in posts"
