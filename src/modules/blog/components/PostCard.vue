@@ -36,33 +36,41 @@ const handleEdit = (id: number) => {
     variant="tonal"
   >
     <v-card-item>
-      <v-card-title>{{ title }}</v-card-title>
-      <v-card-subtitle
-        >{{ timestampToDate(created_at!) }} por {{ profiles.username }}
-      </v-card-subtitle>
+      <v-row>
+        <v-col sm="6">
+          <v-card-title>{{ title }}</v-card-title>
+          <v-card-subtitle
+            >{{ timestampToDate(created_at!) }} por {{ profiles.username }}
+          </v-card-subtitle>
+        </v-col>
+        <v-col>
+          <v-card-actions
+            v-if="user_id === post.profiles.id"
+            class="d-flex justify-center justify-sm-end align-center"
+          >
+            <v-btn
+              color="warning"
+              :loading="isPending"
+              prepend-icon="mdi-pencil-outline"
+              variant="elevated"
+              @click="handleEdit(id!)"
+            >
+              Editar</v-btn
+            >
+            <v-btn
+              color="red"
+              :loading="isPending"
+              prepend-icon="mdi-delete-outline"
+              variant="outlined"
+              @click="handleDelete(id!)"
+              >Excluir</v-btn
+            >
+          </v-card-actions>
+        </v-col>
+      </v-row>
     </v-card-item>
-    <v-card-text class="text-indent text-justify">{{ text }}</v-card-text>
-    <v-card-actions class="d-flex justify-end">
-      <template v-if="user_id === post.profiles.id">
-        <v-btn
-          color="warning"
-          :loading="isPending"
-          prepend-icon="mdi-pencil-outline"
-          variant="elevated"
-          @click="handleEdit(id!)"
-        >
-          Editar</v-btn
-        >
-        <v-btn
-          color="red"
-          :loading="isPending"
-          prepend-icon="mdi-delete-outline"
-          variant="outlined"
-          @click="handleDelete(id!)"
-          >Excluir</v-btn
-        >
-      </template>
-    </v-card-actions>
+
+    <v-card-text class="text-indent text-justify pa-2">{{ text }}</v-card-text>
   </v-card>
 </template>
 
