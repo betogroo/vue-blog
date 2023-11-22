@@ -10,6 +10,7 @@ const indexLoading = ref<number | string>(-1)
 const {
   addPost,
   deletePost: _deletePost,
+  editPost: _editPost,
   fetchPosts,
   isPending: postPending,
   posts,
@@ -35,6 +36,10 @@ const deletePost = async (id: number) => {
     console.error('deletePost', error)
   }
 }
+
+const editPost = (id: number) => {
+  _editPost(id)
+}
 onBeforeMount(async () => {
   await fetchPosts()
 })
@@ -50,6 +55,7 @@ onBeforeMount(async () => {
       :post="post"
       :user_id="profileStore.userProfile.id"
       @handle-delete="(id) => deletePost(id)"
+      @handle-edit="(id) => editPost(id)"
     />
     <PostForm
       :is-pending="postPending && indexLoading === 'submitPost'"

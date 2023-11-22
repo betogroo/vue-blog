@@ -67,7 +67,11 @@ const usePost = () => {
       isPending.value = false
     }
   }
-  return { isPending, error, posts, addPost, deletePost, fetchPosts }
+
+  const editPost = (id: number) => {
+    console.log(id)
+  }
+  return { isPending, error, posts, addPost, deletePost, editPost, fetchPosts }
 }
 
 export default usePost
