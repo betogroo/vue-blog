@@ -10,6 +10,7 @@ const indexLoading = ref<number | string>(-1)
 const {
   addPost,
   deletePost: _deletePost,
+  editPost: _editPost,
   fetchPosts,
   isPending: postPending,
   posts,
@@ -35,13 +36,16 @@ const deletePost = async (id: number) => {
     console.error('deletePost', error)
   }
 }
+
+const editPost = async (id: number) => {
+  await _editPost(id)
+}
 onBeforeMount(async () => {
   await fetchPosts()
 })
 </script>
 <template>
   <v-container class="d-flex flex-column justify-center">
-    <h1 class="text-center text-h3">VuetiFlog - HOME PAGE</h1>
     <h1 v-if="!posts.length">Nada a mostrar</h1>
     <PostCard
       v-for="(post, i) in posts"
@@ -50,6 +54,7 @@ onBeforeMount(async () => {
       :post="post"
       :user_id="profileStore.userProfile.id"
       @handle-delete="(id) => deletePost(id)"
+      @handle-edit="(id) => editPost(id)"
     />
     <PostForm
       :is-pending="postPending && indexLoading === 'submitPost'"

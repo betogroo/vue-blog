@@ -20,8 +20,8 @@ const useHelpers = () => {
   const avatarInitials = (name: string) => {
     const names = name.trim().split(' ')
     const firstInitial = names[0][0]
-    const seconstInitial = names[names.length - 1][0]
-    const initials = `${firstInitial}${seconstInitial}`
+    const secondInitial = names[names.length - 1][0]
+    const initials = `${firstInitial}${secondInitial}`
     return initials
   }
 
@@ -75,7 +75,7 @@ const useHelpers = () => {
     }).format(data)
   }
 
-  const timestampToDate = (date: number) =>
+  const timestampToDate = (date: number | string | Date) =>
     new Date(date).toLocaleDateString('pt-BR')
 
   const lastColumnGrid = <T>(item: T[], index: number) => {

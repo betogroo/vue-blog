@@ -67,7 +67,18 @@ const usePost = () => {
       isPending.value = false
     }
   }
-  return { isPending, error, posts, addPost, deletePost, fetchPosts }
+
+  const editPost = async (id: number) => {
+    try {
+      await clearErrorAndSetPending()
+      console.log(id)
+    } catch (err) {
+      error.value = handleError(err)
+    } finally {
+      isPending.value = false
+    }
+  }
+  return { isPending, error, posts, addPost, deletePost, editPost, fetchPosts }
 }
 
 export default usePost
