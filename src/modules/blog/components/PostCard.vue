@@ -7,10 +7,12 @@ interface Props {
   post: PostWithProfile
   user_id: string
   isPending?: boolean
+  isComplete?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isPending: false,
+  isComplete: false,
 })
 
 const emit = defineEmits<{
@@ -71,6 +73,18 @@ const handleEdit = (id: number) => {
     </v-card-item>
 
     <v-card-text class="text-indent text-justify pa-2">{{ text }}</v-card-text>
+    <v-card-actions
+      v-if="!isComplete"
+      class="justify-end"
+    >
+      <v-btn
+        class="text-none"
+        color="primary"
+        :ripple="false"
+        :to="{ name: 'PostView', params: { id: post.id } }"
+        >Ler mais</v-btn
+      >
+    </v-card-actions>
   </v-card>
 </template>
 
