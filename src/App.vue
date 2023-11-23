@@ -24,8 +24,16 @@ const handleLogout = async () => {
     />
     <v-main>
       <Suspense>
+        <template #fallback>
+          <v-card
+            color="red"
+            height="250"
+            width="250"
+          >
+            Card aqui
+          </v-card>
+        </template>
         <RouterView />
-        <template #fallback>...</template>
       </Suspense>
     </v-main>
   </v-app>

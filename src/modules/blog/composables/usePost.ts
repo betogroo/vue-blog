@@ -5,19 +5,21 @@ import {
   type PostWithProfile,
   type Post,
   PostsWithProfileSchema,
+  PostWithProfileSchema,
 } from '../types/Blog'
 
 const posts = ref<PostWithProfile[]>([])
+const post = ref<PostWithProfile>()
 
 const { delay, handleError } = useHelpers()
 
 const isPending = ref(false)
 const error = ref<string | null>(null)
 
-const clearErrorAndSetPending = async () => {
+const clearErrorAndSetPending = async (value: number | false = 2000) => {
   error.value = null
   isPending.value = true
-  await delay()
+  if (value) await delay(value)
 }
 
 const usePost = () => {
@@ -33,6 +35,27 @@ const usePost = () => {
         const parsedData = PostsWithProfileSchema.parse(data)
         posts.value = parsedData
       }
+    } catch (err) {
+      error.value = handleError(err)
+    } finally {
+      isPending.value = false
+    }
+  }
+
+  const getPost = async (id: number) => {
+    try {
+      await clearErrorAndSetPending(false)
+      const { data, error: err } = await supabase
+        .from('post')
+        .select('id, title, text, created_at, profiles(id, username)')
+        .eq('id', id)
+        .single()
+      if (err) throw err
+      if (data) {
+        const parsedData = PostWithProfileSchema.parse(data)
+        post.value = parsedData
+      }
+      console.log(data)
     } catch (err) {
       error.value = handleError(err)
     } finally {
@@ -78,7 +101,17 @@ const usePost = () => {
       isPending.value = false
     }
   }
-  return { isPending, error, posts, addPost, deletePost, editPost, fetchPosts }
+  return {
+    isPending,
+    error,
+    post,
+    posts,
+    addPost,
+    deletePost,
+    editPost,
+    fetchPosts,
+    getPost,
+  }
 }
 
 export default usePost

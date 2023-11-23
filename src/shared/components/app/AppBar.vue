@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { APP_TITLE } from '@/config'
 import type { User } from '@/modules/auth/types/Auth'
+import { ref } from 'vue'
 interface Props {
-  isPending: boolean
+  isPending: boolean | string
   user: User
 }
 withDefaults(defineProps<Props>(), {
@@ -10,7 +11,9 @@ withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits(['logout'])
+const logoutPending = ref(false)
 const handleLogout = async () => {
+  logoutPending.value = true
   emit('logout')
 }
 </script>
@@ -43,7 +46,7 @@ const handleLogout = async () => {
         />
         <v-btn
           icon="mdi-logout"
-          :loading="isPending"
+          :loading="isPending && logoutPending"
           @click="handleLogout"
         />
       </template>
