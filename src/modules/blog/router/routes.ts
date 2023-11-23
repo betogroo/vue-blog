@@ -11,6 +11,16 @@ const routes: CustomRouteRecordRaw[] = [
       requiresAuth: true,
     },
   },
+  {
+    path: '/blog/post/:id',
+    component: () => import('../views/BlogPost.vue'),
+    props: (router) => ({ id: +router.params.id }),
+    name: 'Post',
+    meta: {
+      title: 'Post',
+      requiresAuth: true,
+    },
+  },
 ]
 
 export default routes
