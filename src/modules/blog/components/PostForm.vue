@@ -48,6 +48,7 @@ const onSubmit = handleSubmit(async () => {
       <v-col class="d-flex justify-end">
         <v-btn
           class="text-right"
+          color="black"
           :disabled="!meta.valid"
           :loading="isPending"
           type="submit"

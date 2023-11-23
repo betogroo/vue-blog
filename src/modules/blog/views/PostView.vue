@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onBeforeMount } from 'vue'
 import { usePost } from '../composables'
 import { PostCard } from '../components'
 import { useProfileStore } from '@/modules/auth/store/useProfileStore'
@@ -12,9 +11,7 @@ const props = defineProps<Props>()
 const { getPost, post } = usePost()
 const profileStore = useProfileStore()
 
-onBeforeMount(async () => {
-  await getPost(props.id)
-})
+await getPost(props.id)
 </script>
 
 <template>

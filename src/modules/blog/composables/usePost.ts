@@ -71,6 +71,7 @@ const usePost = () => {
         .from('post')
         .insert(postData)
         .select()
+        .single()
       if (err || !data) throw Error('Não foi possível postar')
       return data
     } catch (err) {
