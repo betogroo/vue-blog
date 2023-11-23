@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { PostForm, PostCard } from '../components'
-import { Post } from '../types/Blog'
+import { PostCard } from '../components'
 import { usePost } from '../composables'
 import { ref } from 'vue'
 import { useProfileStore } from '@/modules/auth/store/useProfileStore'
@@ -8,7 +7,6 @@ import { useProfileStore } from '@/modules/auth/store/useProfileStore'
 const indexLoading = ref<number | string>(-1)
 
 const {
-  addPost,
   deletePost: _deletePost,
   editPost: _editPost,
   fetchPosts,
@@ -16,16 +14,6 @@ const {
   posts,
 } = usePost()
 const profileStore = useProfileStore()
-
-const submitPost = async (post: Post) => {
-  indexLoading.value = 'submitPost'
-  const user_id = profileStore.userProfile.id
-  try {
-    await addPost(post, user_id)
-  } catch (err) {
-    console.log('BlogHome', err)
-  }
-}
 
 const deletePost = async (id: number) => {
   indexLoading.value = posts.value.findIndex((item) => item.id === id)
@@ -46,7 +34,18 @@ await fetchPosts()
 <template>
   <v-container class="d-flex flex-column justify-center">
     <h1 v-show="!posts.length">Nada a mostrar</h1>
-
+    <v-card
+      class="text-right px-3"
+      variant="text"
+    >
+      <v-btn
+        class="text-none"
+        color="success"
+        prepend-icon="mdi-plus"
+        :to="{ name: 'PostAdd' }"
+        >Novo Post</v-btn
+      >
+    </v-card>
     <PostCard
       v-for="(post, i) in posts"
       :key="post.id!"
@@ -55,11 +54,6 @@ await fetchPosts()
       :user_id="profileStore.userProfile.id"
       @handle-delete="(id) => deletePost(id)"
       @handle-edit="(id) => editPost(id)"
-    />
-
-    <PostForm
-      :is-pending="postPending && indexLoading === 'submitPost'"
-      @submit-post="(post) => submitPost(post)"
     />
   </v-container>
 </template>
