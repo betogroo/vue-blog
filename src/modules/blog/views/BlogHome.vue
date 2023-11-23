@@ -2,7 +2,7 @@
 import { PostForm, PostCard } from '../components'
 import { Post } from '../types/Blog'
 import { usePost } from '../composables'
-import { onBeforeMount, ref } from 'vue'
+import { ref } from 'vue'
 import { useProfileStore } from '@/modules/auth/store/useProfileStore'
 
 const indexLoading = ref<number | string>(-1)
@@ -40,13 +40,13 @@ const deletePost = async (id: number) => {
 const editPost = async (id: number) => {
   await _editPost(id)
 }
-onBeforeMount(async () => {
-  await fetchPosts()
-})
+
+await fetchPosts()
 </script>
 <template>
   <v-container class="d-flex flex-column justify-center">
-    <h1 v-if="!posts.length">Nada a mostrar</h1>
+    <h1 v-show="!posts.length">Nada a mostrar</h1>
+
     <PostCard
       v-for="(post, i) in posts"
       :key="post.id!"
@@ -56,6 +56,7 @@ onBeforeMount(async () => {
       @handle-delete="(id) => deletePost(id)"
       @handle-edit="(id) => editPost(id)"
     />
+
     <PostForm
       :is-pending="postPending && indexLoading === 'submitPost'"
       @submit-post="(post) => submitPost(post)"

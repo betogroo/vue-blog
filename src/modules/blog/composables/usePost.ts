@@ -25,7 +25,7 @@ const clearErrorAndSetPending = async (value: number | false = 2000) => {
 const usePost = () => {
   const fetchPosts = async () => {
     try {
-      await clearErrorAndSetPending(false)
+      await clearErrorAndSetPending()
       const { data, error: err } = await supabase
         .from('post')
         .select('id, title, text, created_at, profiles(id, username)')
