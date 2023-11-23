@@ -73,16 +73,22 @@ const handleEdit = (id: number) => {
     </v-card-item>
 
     <v-card-text class="text-indent text-justify pa-2">{{ text }}</v-card-text>
-    <v-card-actions
-      v-if="!isComplete"
-      class="justify-end"
-    >
+    <v-card-actions class="justify-end">
       <v-btn
+        v-if="!isComplete"
         class="text-none"
         color="primary"
         :ripple="false"
         :to="{ name: 'PostView', params: { id: post.id } }"
         >Ler mais</v-btn
+      >
+      <v-btn
+        v-else
+        class="text-none"
+        color="primary"
+        :ripple="false"
+        :to="{ name: 'BlogHome' }"
+        >Voltar</v-btn
       >
     </v-card-actions>
   </v-card>

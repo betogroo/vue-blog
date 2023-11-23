@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
 import { usePost } from '../composables'
+import { PostCard } from '../components'
+import { useProfileStore } from '@/modules/auth/store/useProfileStore'
 
 interface Props {
   id: number
 }
 const props = defineProps<Props>()
 
-const { getPost } = usePost()
+const { getPost, post } = usePost()
+const profileStore = useProfileStore()
 
 onBeforeMount(async () => {
   await getPost(props.id)
@@ -15,5 +18,10 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div>Post - {{ id }}</div>
+  <PostCard
+    v-if="post"
+    :is-complete="true"
+    :post="post"
+    :user_id="profileStore.userProfile.id"
+  />
 </template>
