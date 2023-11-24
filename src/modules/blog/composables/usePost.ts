@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { useHelpers } from '@/shared/composables'
 import { supabase } from '@/plugins/supabase'
+import { useBlogStore } from '../store/useBlogStore'
 import {
   type PostWithProfile,
   type Post,
@@ -23,6 +24,7 @@ const clearErrorAndSetPending = async (action: string) => {
 }
 
 const usePost = () => {
+  const blogStore = useBlogStore()
   const fetchPosts = async () => {
     try {
       await clearErrorAndSetPending('fetchPosts')
@@ -34,6 +36,7 @@ const usePost = () => {
       if (data) {
         const parsedData = PostsWithProfileSchema.parse(data)
         posts.value = parsedData
+        blogStore.posts = parsedData
       }
     } catch (err) {
       error.value = handleError(err)
@@ -85,6 +88,7 @@ const usePost = () => {
       await clearErrorAndSetPending('deletePost')
       const { error: err } = await supabase.from('post').delete().eq('id', id)
       if (err) throw err
+      await fetchPosts()
     } catch (err) {
       error.value = handleError(err)
     } finally {
