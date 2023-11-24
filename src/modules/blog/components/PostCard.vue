@@ -67,7 +67,7 @@ const handleEdit = (id: number) => {
               variant="outlined"
               @click="handleDelete(id!)"
               >Excluir</v-btn
-            >{{ indexPending }} - {{ isPending }}
+            >
           </v-card-actions>
         </v-col>
       </v-row>
