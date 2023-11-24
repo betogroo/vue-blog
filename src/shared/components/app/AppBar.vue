@@ -46,7 +46,7 @@ const handleLogout = async () => {
         />
         <v-btn
           icon="mdi-logout"
-          :loading="isPending && logoutPending"
+          :loading="isPending === 'logout'"
           @click="handleLogout"
         />
       </template>

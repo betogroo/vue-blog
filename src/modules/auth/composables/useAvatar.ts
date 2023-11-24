@@ -5,10 +5,17 @@ const { delay, handleError } = useHelpers()
 
 import { useAvatarStore } from '../store/useAvatarStore'
 
+const isPending = ref<string | false>(false)
+const error = ref<string | null>(null)
+
+const clearErrorAndSetPending = async (action: string) => {
+  error.value = null
+  isPending.value = action
+  await delay()
+}
+
 const useAvatar = () => {
   const store = useAvatarStore()
-  const isPending = ref(false)
-  const error = ref<string | null>(null)
 
   const downloadImage = async (avatar_url: string | null | undefined) => {
     try {
@@ -40,8 +47,7 @@ const useAvatar = () => {
 
   const updateAvatar = async () => {
     try {
-      error.value = null
-      isPending.value = true
+      clearErrorAndSetPending('updateAvatar')
       if (!store.file) throw new Error('Nenhuma imagem foi selecionada')
       const fileExt = store.file.name.split('.').pop()
       const filePath = `${Date.now()}.${fileExt}`
@@ -50,7 +56,6 @@ const useAvatar = () => {
         .from('avatars')
         .upload(filePath, store.file)
       if (uploadError) throw uploadError
-      await delay()
       store.editMode = false
       return data.path
     } catch (err) {

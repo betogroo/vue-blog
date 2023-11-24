@@ -6,7 +6,7 @@ import { useField, useForm } from 'vee-validate'
 interface Props {
   user: User
   profile: Profile
-  isPending?: boolean
+  isPending?: string | false
 }
 const props = withDefaults(defineProps<Props>(), {
   isPending: false,
@@ -74,7 +74,7 @@ const onSubmit = handleSubmit(async () => {
           color="success"
           density="comfortable"
           :disabled="!meta.valid"
-          :loading="isPending"
+          :loading="isPending === 'updateProfile'"
           type="submit"
           >Salvar</v-btn
         >
