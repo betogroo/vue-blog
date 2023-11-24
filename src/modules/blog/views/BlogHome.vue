@@ -26,7 +26,9 @@ const deletePost = async (id: number) => {
 }
 
 const editPost = async (id: number) => {
+  indexLoading.value = posts.value.findIndex((item) => item.id === id)
   await _editPost(id)
+  indexLoading.value = -1
 }
 
 await fetchPosts()
@@ -49,7 +51,8 @@ await fetchPosts()
     <PostCard
       v-for="(post, i) in posts"
       :key="post.id!"
-      :is-pending="postPending && i === indexLoading"
+      :index-pending="indexLoading === i"
+      :is-pending="postPending"
       :post="post"
       :user_id="profileStore.userProfile.id"
       @handle-delete="(id) => deletePost(id)"

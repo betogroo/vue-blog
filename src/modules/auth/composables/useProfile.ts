@@ -5,17 +5,22 @@ import { useHelpers } from '@/shared/composables'
 import { useProfileStore } from '../store/useProfileStore'
 
 const { delay, handleError } = useHelpers()
+const isPending = ref<string | false>(false)
+const error = ref<string | null>(null)
+
+const clearErrorAndSetPending = async (action: string) => {
+  error.value = null
+  isPending.value = action
+  await delay()
+}
 
 const profile = ref<Profile>()
 const useProfile = () => {
   const store = useProfileStore()
-  const isPending = ref(false)
-  const error = ref<string | null>(null)
 
   const getProfile = async (id: string) => {
     try {
-      error.value = null
-      isPending.value = true
+      clearErrorAndSetPending('getProfile')
       const {
         data,
         error: err,
@@ -39,8 +44,7 @@ const useProfile = () => {
 
   const updateProfile = async (updates: Profile) => {
     try {
-      error.value = null
-      isPending.value = true
+      clearErrorAndSetPending('updateProfile')
       await delay()
       const parsedData = ProfileSchema.parse(updates)
       const { error: err } = await supabase.from('profiles').upsert(parsedData)
@@ -62,8 +66,7 @@ const useProfile = () => {
   const updateAvatarUrl = async (id: string, avatar_url: string) => {
     try {
       const updated_at = new Date().toISOString()
-      error.value = null
-      isPending.value = true
+      clearErrorAndSetPending('updateAvatarUrl')
       const { data, error: err } = await supabase
         .from('profiles')
         .update({ avatar_url, updated_at })

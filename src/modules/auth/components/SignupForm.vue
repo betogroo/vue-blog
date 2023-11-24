@@ -3,7 +3,7 @@ import { useField, useForm } from 'vee-validate'
 import { Credentials, validationSignupSchema } from '../types/Auth'
 
 interface Props {
-  isPending?: boolean
+  isPending?: string | false
 }
 withDefaults(defineProps<Props>(), {
   isPending: false,
@@ -79,7 +79,7 @@ const onSubmit = handleSubmit(async () => {
           block
           color="primary"
           :disabled="!meta.valid"
-          :loading="isPending"
+          :loading="isPending === 'signup'"
           type="submit"
           >Cadastrar</v-btn
         >

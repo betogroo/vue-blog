@@ -39,7 +39,7 @@ const {
   getProfile,
   updateProfile: _updateProfile,
   updateAvatarUrl,
-  isPending,
+  isPending: profilePending,
   error: profileError,
 } = useProfile()
 const {
@@ -129,7 +129,7 @@ await loadProfile()
     />
     <ProfileForm
       v-if="profileForm"
-      :is-pending="isPending"
+      :is-pending="profilePending"
       :profile="profile!"
       :user="user"
       @toggle-form="toggleForm"

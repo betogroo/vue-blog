@@ -3,7 +3,7 @@ import { Credentials, validationLoginSchema } from '../types/Auth'
 import { useField, useForm } from 'vee-validate'
 
 interface Props {
-  isPending?: boolean
+  isPending?: string | false
 }
 withDefaults(defineProps<Props>(), {
   isPending: false,
@@ -27,7 +27,7 @@ const onSubmit = handleSubmit(async () => {
 
 <template>
   <v-form
-    :disabled="isPending"
+    :disabled="isPending === 'login-form'"
     @submit.prevent="onSubmit"
   >
     <v-row>
@@ -58,7 +58,7 @@ const onSubmit = handleSubmit(async () => {
           block
           color="primary"
           :disabled="!meta.valid"
-          :loading="isPending"
+          :loading="isPending === 'login'"
           type="submit"
           >Login</v-btn
         >

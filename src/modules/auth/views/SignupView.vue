@@ -3,7 +3,7 @@ import { AlertError, SignupForm } from '../components'
 import type { Credentials } from '../types/Auth'
 import { useAuth } from '../composables'
 import { useRouter } from 'vue-router'
-const { signup, isPending, error } = useAuth()
+const { signup, isPending: authPending, error: authError } = useAuth()
 const router = useRouter()
 
 const handleSignup = async (credentials: Credentials) => {
@@ -28,10 +28,10 @@ const handleSignup = async (credentials: Credentials) => {
         <div class="text-center text-h4 pb-2">Signup</div>
       </template>
       <SignupForm
-        :is-pending="isPending"
+        :is-pending="authPending"
         @signup="(credentials) => handleSignup(credentials)"
       />
-      <AlertError :error="error" />
+      <AlertError :error="authError" />
     </v-card>
   </v-container>
 </template>

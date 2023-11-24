@@ -13,19 +13,19 @@ const post = ref<PostWithProfile>()
 
 const { delay, handleError } = useHelpers()
 
-const isPending = ref(false)
+const isPending = ref<string | false>(false)
 const error = ref<string | null>(null)
 
-const clearErrorAndSetPending = async (value: number | false = 2000) => {
+const clearErrorAndSetPending = async (action: string) => {
   error.value = null
-  isPending.value = true
-  if (value) await delay(value)
+  isPending.value = action
+  await delay()
 }
 
 const usePost = () => {
   const fetchPosts = async () => {
     try {
-      await clearErrorAndSetPending()
+      await clearErrorAndSetPending('fetchPosts')
       const { data, error: err } = await supabase
         .from('post')
         .select('id, title, text, created_at, profiles(id, username)')
@@ -44,7 +44,7 @@ const usePost = () => {
 
   const getPost = async (id: number) => {
     try {
-      await clearErrorAndSetPending(false)
+      await clearErrorAndSetPending('getPost')
       const { data, error: err } = await supabase
         .from('post')
         .select('id, title, text, created_at, profiles(id, username)')
@@ -66,7 +66,7 @@ const usePost = () => {
   const addPost = async (post: Post, user_id: string) => {
     try {
       const postData = { ...post, user_id }
-      await clearErrorAndSetPending()
+      await clearErrorAndSetPending('addPost')
       const { data, error: err } = await supabase
         .from('post')
         .insert(postData)
@@ -82,7 +82,7 @@ const usePost = () => {
   }
   const deletePost = async (id: number) => {
     try {
-      await clearErrorAndSetPending()
+      await clearErrorAndSetPending('deletePost')
       const { error: err } = await supabase.from('post').delete().eq('id', id)
       if (err) throw err
     } catch (err) {
@@ -94,7 +94,7 @@ const usePost = () => {
 
   const editPost = async (id: number) => {
     try {
-      await clearErrorAndSetPending()
+      await clearErrorAndSetPending('editPost')
       console.log(id)
     } catch (err) {
       error.value = handleError(err)

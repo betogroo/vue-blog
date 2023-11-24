@@ -145,7 +145,7 @@
     "body": [
       "import { ref } from 'vue'\n",
       "const ${TM_FILENAME_BASE} = () => {",
-      "\tconst isPending = ref(false)",
+      "\tconst isPending = ref<string | false>(false)",
       "\tconst error = ref(null)",
       "\treturn { isPending, error  }",
       "}",

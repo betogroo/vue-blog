@@ -2,7 +2,7 @@
 import { AppFileBtn } from '@/shared/components'
 interface Props {
   editMode?: boolean
-  isPending?: boolean
+  isPending?: string | false
 }
 withDefaults(defineProps<Props>(), {
   editMode: false,
@@ -36,7 +36,7 @@ const cancelUpdate = () => {
     <div class="d-flex flex-column">
       <v-btn-avatar
         icon="mdi-content-save-outline"
-        :loading="isPending"
+        :loading="isPending === 'updateAvatar'"
         @click="updateAvatar"
       />
       <v-btn-avatar

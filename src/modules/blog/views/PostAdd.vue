@@ -9,7 +9,7 @@ import { useProfileStore } from '@/modules/auth/store/useProfileStore'
 const indexLoading = ref<number | string>(-1)
 
 const router = useRouter()
-const { addPost, isPending } = usePost()
+const { addPost, isPending: postPending } = usePost()
 const profileStore = useProfileStore()
 const submitPost = async (post: Post) => {
   indexLoading.value = 'submitPost'
@@ -27,7 +27,7 @@ const submitPost = async (post: Post) => {
 <template>
   <v-container>
     <PostForm
-      :is-pending="isPending && indexLoading === 'submitPost'"
+      :is-pending="postPending"
       @submit-post="(post) => submitPost(post)"
     />
   </v-container>

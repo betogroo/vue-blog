@@ -6,7 +6,8 @@ import { useHelpers } from '@/shared/composables'
 interface Props {
   post: PostWithProfile
   user_id: string
-  isPending?: boolean
+  isPending?: string | boolean
+  indexPending?: boolean
   isComplete?: boolean
 }
 
@@ -52,7 +53,7 @@ const handleEdit = (id: number) => {
           >
             <v-btn
               color="warning"
-              :loading="isPending"
+              :loading="isPending === 'editPost' && indexPending"
               prepend-icon="mdi-pencil-outline"
               variant="elevated"
               @click="handleEdit(id!)"
@@ -61,12 +62,12 @@ const handleEdit = (id: number) => {
             >
             <v-btn
               color="red"
-              :loading="isPending"
+              :loading="isPending === 'deletePost' && indexPending"
               prepend-icon="mdi-delete-outline"
               variant="outlined"
               @click="handleDelete(id!)"
               >Excluir</v-btn
-            >
+            >{{ indexPending }} - {{ isPending }}
           </v-card-actions>
         </v-col>
       </v-row>
