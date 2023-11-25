@@ -1,15 +1,21 @@
 <script setup lang="ts">
-import { PostCard } from '../components'
+import { PostCard, PostForm } from '../components'
 import { usePost } from '../composables'
 import { ref } from 'vue'
+import { useBlogStore } from '../store/useBlogStore'
 import { useProfileStore } from '@/modules/auth/store/useProfileStore'
+import AppDialogFull from '@/shared/components/app/AppDialogFull.vue'
+import { Post } from '../types/Blog'
 
 const indexLoading = ref<number | string>(-1)
+
+const blogStore = useBlogStore()
 
 const {
   deletePost: _deletePost,
   editPost: _editPost,
   fetchPosts,
+  addPost,
   isPending: postPending,
   posts,
 } = usePost()
@@ -31,25 +37,46 @@ const editPost = async (id: number) => {
   indexLoading.value = -1
 }
 
+const submitPost = async (post: Post) => {
+  indexLoading.value = 'submitPost'
+  const user_id = profileStore.userProfile.id
+  try {
+    const data = await addPost(post, user_id)
+    if (!data) throw Error('Não foi possível postar.')
+    await fetchPosts()
+    toggleDialog()
+  } catch (err) {
+    console.log('BlogHome', err)
+  }
+}
+
+const dialog = ref(false)
+const toggleDialog = () => {
+  dialog.value = !dialog.value
+}
+
 await fetchPosts()
 </script>
 <template>
   <v-container class="d-flex flex-column justify-center">
-    <h1 v-show="!posts.length">Nada a mostrar</h1>
+    <h1 v-show="!blogStore.posts.length">Nada a mostrar</h1>
     <v-card
       class="text-right px-3"
       variant="text"
     >
-      <v-btn
-        class="text-none"
-        color="success"
-        prepend-icon="mdi-plus"
-        :to="{ name: 'PostAdd' }"
-        >Novo Post</v-btn
+      <AppDialogFull
+        v-model="dialog"
+        button-color="success"
+        button-title="Novo Post"
       >
+        <PostForm
+          :is-pending="postPending"
+          @submit-post="(post) => submitPost(post)"
+        />
+      </AppDialogFull>
     </v-card>
     <PostCard
-      v-for="(post, i) in posts"
+      v-for="(post, i) in blogStore.posts"
       :key="post.id!"
       :index-pending="indexLoading === i"
       :is-pending="postPending"

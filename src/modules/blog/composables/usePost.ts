@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { useHelpers } from '@/shared/composables'
 import { supabase } from '@/plugins/supabase'
+import { useBlogStore } from '../store/useBlogStore'
 import {
   type PostWithProfile,
   type Post,
@@ -11,29 +12,32 @@ import {
 const posts = ref<PostWithProfile[]>([])
 const post = ref<PostWithProfile>()
 
-const { delay, handleError } = useHelpers()
+const { delay: _delay, handleError } = useHelpers()
 
 const isPending = ref<string | false>(false)
 const error = ref<string | null>(null)
 
-const clearErrorAndSetPending = async (action: string) => {
+const clearErrorAndSetPending = async (action: string, delay = false) => {
   error.value = null
   isPending.value = action
-  await delay()
+  if (delay) await _delay()
 }
 
 const usePost = () => {
+  const blogStore = useBlogStore()
   const fetchPosts = async () => {
     try {
       await clearErrorAndSetPending('fetchPosts')
       const { data, error: err } = await supabase
         .from('post')
         .select('id, title, text, created_at, profiles(id, username)')
+        .order('created_at', { ascending: false })
 
       if (err) throw err
       if (data) {
         const parsedData = PostsWithProfileSchema.parse(data)
         posts.value = parsedData
+        blogStore.posts = parsedData
       }
     } catch (err) {
       error.value = handleError(err)
@@ -85,6 +89,7 @@ const usePost = () => {
       await clearErrorAndSetPending('deletePost')
       const { error: err } = await supabase.from('post').delete().eq('id', id)
       if (err) throw err
+      await fetchPosts()
     } catch (err) {
       error.value = handleError(err)
     } finally {
