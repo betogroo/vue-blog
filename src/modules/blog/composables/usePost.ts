@@ -12,15 +12,15 @@ import {
 const posts = ref<PostWithProfile[]>([])
 const post = ref<PostWithProfile>()
 
-const { delay, handleError } = useHelpers()
+const { delay: _delay, handleError } = useHelpers()
 
 const isPending = ref<string | false>(false)
 const error = ref<string | null>(null)
 
-const clearErrorAndSetPending = async (action: string) => {
+const clearErrorAndSetPending = async (action: string, delay = false) => {
   error.value = null
   isPending.value = action
-  await delay()
+  if (delay) await _delay()
 }
 
 const usePost = () => {
@@ -31,6 +31,7 @@ const usePost = () => {
       const { data, error: err } = await supabase
         .from('post')
         .select('id, title, text, created_at, profiles(id, username)')
+        .order('created_at', { ascending: false })
 
       if (err) throw err
       if (data) {

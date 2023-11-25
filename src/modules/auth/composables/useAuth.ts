@@ -63,8 +63,8 @@ const useAuth = () => {
     try {
       await clearErrorAndSetPending('logout')
       const { error: err } = await supabase.auth.signOut()
-      store.user = null
       if (err) throw err
+      store.user = null
     } catch (err) {
       error.value = handleError(err)
     } finally {

@@ -64,19 +64,16 @@ await fetchPosts()
       class="text-right px-3"
       variant="text"
     >
-      <AppDialogFull v-model="dialog">
+      <AppDialogFull
+        v-model="dialog"
+        button-color="success"
+        button-title="Novo Post"
+      >
         <PostForm
           :is-pending="postPending"
           @submit-post="(post) => submitPost(post)"
         />
       </AppDialogFull>
-      <v-btn
-        class="text-none"
-        color="success"
-        prepend-icon="mdi-plus"
-        :to="{ name: 'PostAdd' }"
-        >Novo Post</v-btn
-      >
     </v-card>
     <PostCard
       v-for="(post, i) in blogStore.posts"
