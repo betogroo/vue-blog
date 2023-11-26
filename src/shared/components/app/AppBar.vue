@@ -41,6 +41,10 @@ const handleLogout = async () => {
       />
       <template v-if="user">
         <v-btn
+          icon="mdi-post"
+          :to="{ name: 'BlogHome' }"
+        />
+        <v-btn
           icon="mdi-account"
           :to="{ name: 'ProfileView' }"
         />
