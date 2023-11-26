@@ -34,4 +34,14 @@ export default createVuetify({
       },
     },
   },
+  display: {
+    mobileBreakpoint: 'sm',
+    thresholds: {
+      xs: 0,
+      sm: 425,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+    },
+  },
 })
