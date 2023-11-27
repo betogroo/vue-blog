@@ -50,7 +50,7 @@ const handleEdit = (id: number) => {
         <v-col>
           <v-card-actions
             v-if="user_id === post.profiles.id"
-            class="d-flex justify-end align-center"
+            class="d-flex justify-end align-center ma-0 pa-0"
           >
             <BlogBtn
               color="warning"
