@@ -36,8 +36,7 @@ const handleEdit = (id: number) => {
 <template>
   <v-card
     class="my-1"
-    color="primary"
-    variant="tonal"
+    variant="outlined"
   >
     <v-card-item class="ml-2 pt-0">
       <v-row
@@ -64,7 +63,7 @@ const handleEdit = (id: number) => {
               color="red"
               icon="mdi-delete-outline"
               :loading="isPending === 'deletePost' && indexPending"
-              text="Editar"
+              text="Excluir"
               variant="outlined"
               @handle-click="handleDelete(id!)"
             />
@@ -87,7 +86,7 @@ const handleEdit = (id: number) => {
       <v-btn
         v-if="!isComplete"
         class="text-none"
-        color="primary"
+        color="black"
         :ripple="false"
         :to="{ name: 'PostView', params: { id: post.id } }"
         >Ler mais</v-btn
@@ -95,7 +94,7 @@ const handleEdit = (id: number) => {
       <v-btn
         v-else
         class="text-none"
-        color="primary"
+        color="black"
         :ripple="false"
         :to="{ name: 'BlogHome' }"
         >Voltar</v-btn
