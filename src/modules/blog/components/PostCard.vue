@@ -24,7 +24,7 @@ const emit = defineEmits<{
 
 const { id, title, created_at, text, profiles } = toRefs(props.post)
 const { timestampToDate } = useHelpers()
-const { limitText } = useText()
+const { limitText, paragraph } = useText()
 
 const handleDelete = (id: number) => {
   emit('handleDelete', id)
@@ -79,10 +79,19 @@ const handleEdit = (id: number) => {
         </v-col>
       </v-row>
     </v-card-item>
-
-    <v-card-text class="text-indent text-justify pa-1 mx-2">{{
-      isComplete ? text : limitText(text, 500)
-    }}</v-card-text>
+    <v-card-text class="text-indent text-justify pa-1 mx-2">
+      <template v-if="isComplete">
+        <p
+          v-for="(_paragraph, i) in paragraph(text)"
+          :key="i"
+        >
+          {{ _paragraph }}
+        </p>
+      </template>
+      <template v-else>
+        <p>{{ limitText(text, 500) }} ...</p>
+      </template>
+    </v-card-text>
     <v-card-actions class="pa-0 mr-2 justify-end">
       <v-btn
         v-if="!isComplete"
@@ -90,7 +99,7 @@ const handleEdit = (id: number) => {
         color="black"
         :ripple="false"
         :to="{ name: 'PostView', params: { id: post.id } }"
-        >Ler mais</v-btn
+        >Ver post completo</v-btn
       >
       <v-btn
         v-else

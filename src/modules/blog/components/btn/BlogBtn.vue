@@ -40,7 +40,6 @@ const handleClick = () => {
     variant="text"
     @click="handleClick"
   />
-
   <v-btn
     v-else
     class="text-none"

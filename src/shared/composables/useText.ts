@@ -1,5 +1,5 @@
 const useText = () => {
-  const limitText = (text: string, limit: number): string => {
+  const limitText = (text: string, limit: number): string | string[] => {
     let limitedText = ''
     let countBytes = 0
     const words: string[] = text.split(' ')
@@ -13,10 +13,16 @@ const useText = () => {
         return
       }
     })
-    console.log(text, limitedText, words.length)
     return limitedText
   }
-  return { limitText }
+
+  const paragraph = (text: string): string[] => {
+    const regexQuebraParagraph = /[\n\r]+/
+    const paragraphs = text.split(regexQuebraParagraph)
+
+    return paragraphs
+  }
+  return { limitText, paragraph }
 }
 
 export default useText
