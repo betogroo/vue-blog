@@ -2,7 +2,7 @@
 import { toRefs } from 'vue'
 import BlogBtn from './btn/BlogBtn.vue'
 import { PostWithProfile } from '../types/Blog'
-import { useHelpers } from '@/shared/composables'
+import { useHelpers, useText } from '@/shared/composables'
 
 interface Props {
   post: PostWithProfile
@@ -24,6 +24,7 @@ const emit = defineEmits<{
 
 const { id, title, created_at, text, profiles } = toRefs(props.post)
 const { timestampToDate } = useHelpers()
+const { limitText } = useText()
 
 const handleDelete = (id: number) => {
   emit('handleDelete', id)
@@ -80,7 +81,7 @@ const handleEdit = (id: number) => {
     </v-card-item>
 
     <v-card-text class="text-indent text-justify pa-1 mx-2">{{
-      text
+      isComplete ? text : limitText(text, 500)
     }}</v-card-text>
     <v-card-actions class="pa-0 mr-2 justify-end">
       <v-btn
