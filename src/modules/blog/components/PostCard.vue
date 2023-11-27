@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { toRefs } from 'vue'
+import BlogBtn from './btn/BlogBtn.vue'
 import { PostWithProfile } from '../types/Blog'
 import { useHelpers } from '@/shared/composables'
 
@@ -49,25 +50,24 @@ const handleEdit = (id: number) => {
         <v-col>
           <v-card-actions
             v-if="user_id === post.profiles.id"
-            class="d-flex justify-center justify-sm-end align-center"
+            class="d-flex justify-end align-center"
           >
-            <v-btn
+            <BlogBtn
               color="warning"
+              icon="mdi-pencil-outline"
               :loading="isPending === 'editPost' && indexPending"
-              prepend-icon="mdi-pencil-outline"
+              text="Editar"
               variant="elevated"
-              @click="handleEdit(id!)"
-            >
-              Editar</v-btn
-            >
-            <v-btn
+              @handle-click="handleEdit(id!)"
+            />
+            <BlogBtn
               color="red"
+              icon="mdi-delete-outline"
               :loading="isPending === 'deletePost' && indexPending"
-              prepend-icon="mdi-delete-outline"
+              text="Editar"
               variant="outlined"
-              @click="handleDelete(id!)"
-              >Excluir</v-btn
-            >
+              @handle-click="handleDelete(id!)"
+            />
           </v-card-actions>
         </v-col>
       </v-row>

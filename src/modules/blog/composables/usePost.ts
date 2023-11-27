@@ -99,7 +99,7 @@ const usePost = () => {
 
   const editPost = async (id: number) => {
     try {
-      await clearErrorAndSetPending('editPost')
+      await clearErrorAndSetPending('editPost', true)
       console.log(id)
     } catch (err) {
       error.value = handleError(err)
