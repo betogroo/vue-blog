@@ -35,17 +35,17 @@ const handleEdit = (id: number) => {
 
 <template>
   <v-card
-    class="ma-2 pa-3"
+    class="my-1"
     color="primary"
     variant="tonal"
   >
-    <v-card-item>
-      <v-row>
-        <v-col sm="6">
+    <v-card-item class="ml-2 pt-0">
+      <v-row
+        align="center"
+        no-gutters
+      >
+        <v-col cols="6">
           <v-card-title>{{ title }}</v-card-title>
-          <v-card-subtitle
-            >{{ timestampToDate(created_at!) }} por {{ profiles.username }}
-          </v-card-subtitle>
         </v-col>
         <v-col>
           <v-card-actions
@@ -71,10 +71,19 @@ const handleEdit = (id: number) => {
           </v-card-actions>
         </v-col>
       </v-row>
+      <v-row no-gutters>
+        <v-col>
+          <v-card-subtitle
+            >{{ timestampToDate(created_at!) }} por {{ profiles.username }}
+          </v-card-subtitle>
+        </v-col>
+      </v-row>
     </v-card-item>
 
-    <v-card-text class="text-indent text-justify pa-2">{{ text }}</v-card-text>
-    <v-card-actions class="justify-end">
+    <v-card-text class="text-indent text-justify pa-1 mx-2">{{
+      text
+    }}</v-card-text>
+    <v-card-actions class="pa-0 mr-2 justify-end">
       <v-btn
         v-if="!isComplete"
         class="text-none"
@@ -97,6 +106,6 @@ const handleEdit = (id: number) => {
 
 <style lang="scss" scoped>
 .text-indent {
-  text-indent: 3rem;
+  text-indent: 2rem;
 }
 </style>

@@ -35,7 +35,7 @@ const handleClick = () => {
     :color="color"
     :icon="icon"
     :loading="isPending"
-    :variant="variant"
+    variant="text"
     @click="handleClick"
   />
 
