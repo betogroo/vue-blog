@@ -79,14 +79,16 @@ const handleEdit = (id: number) => {
         </v-col>
       </v-row>
     </v-card-item>
-    <v-card-text class="text-indent text-justify pa-1 mx-2">
+    <v-card-text class="text-justify pa-1 mx-2">
       <template v-if="isComplete">
-        <p
+        <template
           v-for="(_paragraph, i) in paragraph(text)"
           :key="i"
         >
-          {{ _paragraph }}
-        </p>
+          <p class="mb-2 text-indent">
+            {{ _paragraph }}
+          </p>
+        </template>
       </template>
       <template v-else>
         <p>{{ limitText(text, 500) }} ...</p>
