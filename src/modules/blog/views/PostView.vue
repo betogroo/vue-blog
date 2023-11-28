@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePost } from '../composables'
+import { usePost, useComment } from '../composables'
 import { PostCard, PostComments } from '../components'
 import { useProfileStore } from '@/modules/auth/store/useProfileStore'
 import { ref } from 'vue'
@@ -18,6 +18,8 @@ const {
   deletePost: _deletePost,
   editPost: _editPost,
 } = usePost()
+
+const { getComment } = useComment()
 const profileStore = useProfileStore()
 const comments = 5
 
@@ -40,6 +42,7 @@ const commentPost = () => {
 }
 
 await getPost(props.id)
+await getComment(props.id)
 </script>
 
 <template>
