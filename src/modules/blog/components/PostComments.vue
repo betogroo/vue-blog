@@ -3,7 +3,10 @@ import BlogBtn from './btn/BlogBtn.vue'
 </script>
 
 <template>
-  <v-card variant="text">
+  <v-card
+    class="py-2"
+    variant="flat"
+  >
     <v-card-text
       class="text-justify pa-2 mx-2 text-indent"
       tag="p"
@@ -13,7 +16,6 @@ import BlogBtn from './btn/BlogBtn.vue'
       eaque ducimus. Deleniti placeat, beatae maiores laboriosam commodi
       doloribus libero culpa?
     </v-card-text>
-    <v-divider inset></v-divider>
     <v-card-actions class="justify-end align-center">
       <v-card-subtitle> 28/11/2023 por alibabá </v-card-subtitle>
       <BlogBtn

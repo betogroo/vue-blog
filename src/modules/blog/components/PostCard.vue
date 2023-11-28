@@ -20,6 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   handleDelete: [id: number]
   handleEdit: [id: number]
+  handleComment: []
 }>()
 
 const { id, title, created_at, text, profiles } = toRefs(props.post)
@@ -32,10 +33,17 @@ const handleDelete = (id: number) => {
 const handleEdit = (id: number) => {
   emit('handleEdit', id)
 }
+
+const handleComment = () => {
+  emit('handleComment')
+}
 </script>
 
 <template>
-  <v-card :variant="isComplete ? 'text' : 'outlined'">
+  <v-card
+    class="my-1"
+    :variant="isComplete ? 'text' : 'outlined'"
+  >
     <v-card-item class="ml-2 pt-0">
       <v-row
         align="center"
@@ -92,22 +100,31 @@ const handleEdit = (id: number) => {
       </template>
     </v-card-text>
     <v-card-actions class="pa-0 mr-2 justify-end">
-      <v-btn
-        v-if="!isComplete"
-        class="text-none"
-        color="black"
-        :ripple="false"
-        :to="{ name: 'PostView', params: { id: post.id } }"
-        >Ver post completo</v-btn
-      >
-      <v-btn
-        v-else
-        class="text-none"
-        color="black"
-        :ripple="false"
-        :to="{ name: 'BlogHome' }"
-        >Voltar</v-btn
-      >
+      <template v-if="!isComplete">
+        <v-btn
+          class="text-none"
+          color="black"
+          :ripple="false"
+          :to="{ name: 'PostView', params: { id: post.id } }"
+          >Ver post completo</v-btn
+        >
+      </template>
+      <template v-else>
+        <v-btn
+          class="text-none"
+          color="green"
+          :ripple="false"
+          @click="handleComment"
+          >Comentar</v-btn
+        >
+        <v-btn
+          class="text-none"
+          color="black"
+          :ripple="false"
+          :to="{ name: 'BlogHome' }"
+          >Voltar</v-btn
+        >
+      </template>
     </v-card-actions>
   </v-card>
 </template>
