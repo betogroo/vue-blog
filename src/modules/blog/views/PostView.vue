@@ -3,11 +3,11 @@ import { usePost } from '../composables'
 import { PostCard } from '../components'
 import { useProfileStore } from '@/modules/auth/store/useProfileStore'
 
+const props = defineProps<Props>()
+
 interface Props {
   id: number
 }
-const props = defineProps<Props>()
-
 const { getPost, post } = usePost()
 const profileStore = useProfileStore()
 

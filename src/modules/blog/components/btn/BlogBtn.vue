@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
-import type { VBtn } from 'vuetify/lib/components/VBtn/index.mjs'
+import { type BtnVariant, useDisplay } from 'vuetify'
 
-type UnwrapReadonlyArray<A> = A extends Readonly<Array<infer I>> ? I : A
-type ValidationRule = UnwrapReadonlyArray<InstanceType<typeof VBtn>['variant']>
 interface Props {
   isPending?: boolean
   icon?: string | boolean
   color?: string
-  variant?: ValidationRule
+  variant?: BtnVariant
   text: string
 }
 withDefaults(defineProps<Props>(), {
