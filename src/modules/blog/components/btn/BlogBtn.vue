@@ -11,7 +11,7 @@ interface Props {
   variant?: ValidationRule
   text: string
 }
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   isPending: false,
   icon: false,
   color: 'primary',
@@ -22,7 +22,7 @@ const emit = defineEmits<{
   handleClick: []
 }>()
 
-const { smAndDown, smAndUp } = useDisplay()
+const { smAndDown } = useDisplay()
 
 const handleClick = () => {
   emit('handleClick')
@@ -32,13 +32,14 @@ const handleClick = () => {
 <template>
   <v-btn
     v-if="smAndDown"
+    class="pa-0 ma-0"
     :color="color"
+    density="compact"
     :icon="icon"
     :loading="isPending"
-    :variant="variant"
+    variant="text"
     @click="handleClick"
   />
-
   <v-btn
     v-else
     class="text-none"

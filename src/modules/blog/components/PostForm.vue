@@ -40,10 +40,12 @@ const onSubmit = handleSubmit(async () => {
         <v-textarea
           v-model="text.value.value"
           clearable
+          :counter="5000"
           :error-messages="text.errorMessage.value"
           label="Label"
           variant="outlined"
-        ></v-textarea>
+        >
+        </v-textarea>
       </v-col>
       <v-col class="d-flex justify-end">
         <v-btn

@@ -2,7 +2,7 @@
 import { toRefs } from 'vue'
 import BlogBtn from './btn/BlogBtn.vue'
 import { PostWithProfile } from '../types/Blog'
-import { useHelpers } from '@/shared/composables'
+import { useHelpers, useText } from '@/shared/composables'
 
 interface Props {
   post: PostWithProfile
@@ -24,6 +24,7 @@ const emit = defineEmits<{
 
 const { id, title, created_at, text, profiles } = toRefs(props.post)
 const { timestampToDate } = useHelpers()
+const { limitText, paragraph } = useText()
 
 const handleDelete = (id: number) => {
   emit('handleDelete', id)
@@ -35,22 +36,21 @@ const handleEdit = (id: number) => {
 
 <template>
   <v-card
-    class="ma-2 pa-3"
-    color="primary"
-    variant="tonal"
+    class="my-1"
+    variant="outlined"
   >
-    <v-card-item>
-      <v-row>
-        <v-col sm="6">
+    <v-card-item class="ml-2 pt-0">
+      <v-row
+        align="center"
+        no-gutters
+      >
+        <v-col cols="6">
           <v-card-title>{{ title }}</v-card-title>
-          <v-card-subtitle
-            >{{ timestampToDate(created_at!) }} por {{ profiles.username }}
-          </v-card-subtitle>
         </v-col>
         <v-col>
           <v-card-actions
             v-if="user_id === post.profiles.id"
-            class="d-flex justify-end align-center"
+            class="d-flex justify-end align-center ma-0 pa-0"
           >
             <BlogBtn
               color="warning"
@@ -64,29 +64,47 @@ const handleEdit = (id: number) => {
               color="red"
               icon="mdi-delete-outline"
               :loading="isPending === 'deletePost' && indexPending"
-              text="Editar"
+              text="Excluir"
               variant="outlined"
               @handle-click="handleDelete(id!)"
             />
           </v-card-actions>
         </v-col>
       </v-row>
+      <v-row no-gutters>
+        <v-col>
+          <v-card-subtitle
+            >{{ timestampToDate(created_at!) }} por {{ profiles.username }}
+          </v-card-subtitle>
+        </v-col>
+      </v-row>
     </v-card-item>
-
-    <v-card-text class="text-indent text-justify pa-2">{{ text }}</v-card-text>
-    <v-card-actions class="justify-end">
+    <v-card-text class="text-indent text-justify pa-1 mx-2">
+      <template v-if="isComplete">
+        <p
+          v-for="(_paragraph, i) in paragraph(text)"
+          :key="i"
+        >
+          {{ _paragraph }}
+        </p>
+      </template>
+      <template v-else>
+        <p>{{ limitText(text, 500) }} ...</p>
+      </template>
+    </v-card-text>
+    <v-card-actions class="pa-0 mr-2 justify-end">
       <v-btn
         v-if="!isComplete"
         class="text-none"
-        color="primary"
+        color="black"
         :ripple="false"
         :to="{ name: 'PostView', params: { id: post.id } }"
-        >Ler mais</v-btn
+        >Ver post completo</v-btn
       >
       <v-btn
         v-else
         class="text-none"
-        color="primary"
+        color="black"
         :ripple="false"
         :to="{ name: 'BlogHome' }"
         >Voltar</v-btn
@@ -97,6 +115,6 @@ const handleEdit = (id: number) => {
 
 <style lang="scss" scoped>
 .text-indent {
-  text-indent: 3rem;
+  text-indent: 2rem;
 }
 </style>

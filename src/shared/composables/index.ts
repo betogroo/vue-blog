@@ -1,2 +1,3 @@
 import useHelpers from './useHelpers'
-export { useHelpers }
+import useText from './useText'
+export { useText, useHelpers }
