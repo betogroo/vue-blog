@@ -35,10 +35,7 @@ const handleEdit = (id: number) => {
 </script>
 
 <template>
-  <v-card
-    class="my-1"
-    variant="outlined"
-  >
+  <v-card :variant="isComplete ? 'text' : 'outlined'">
     <v-card-item class="ml-2 pt-0">
       <v-row
         align="center"
@@ -114,9 +111,3 @@ const handleEdit = (id: number) => {
     </v-card-actions>
   </v-card>
 </template>
-
-<style lang="scss" scoped>
-.text-indent {
-  text-indent: 2rem;
-}
-</style>
