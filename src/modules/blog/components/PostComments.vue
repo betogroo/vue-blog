@@ -1,5 +1,16 @@
 <script setup lang="ts">
 import BlogBtn from './btn/BlogBtn.vue'
+import { useHelpers, useText } from '@/shared/composables'
+
+import type { CommentWithProfile } from '../types/Blog'
+
+interface Props {
+  comment: CommentWithProfile
+}
+defineProps<Props>()
+
+const { timestampToDate } = useHelpers()
+const { paragraph } = useText()
 </script>
 
 <template>
@@ -11,13 +22,20 @@ import BlogBtn from './btn/BlogBtn.vue'
       class="text-justify pa-2 mx-2 text-indent"
       tag="p"
     >
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae eius
-      minima, veritatis culpa asperiores quidem, tempora ex facilis voluptas
-      eaque ducimus. Deleniti placeat, beatae maiores laboriosam commodi
-      doloribus libero culpa?
+      <template
+        v-for="(_paragraph, i) in paragraph(comment.text)"
+        :key="i"
+      >
+        <p class="mb-2 text-indent">
+          {{ _paragraph }}
+        </p>
+      </template>
     </v-card-text>
     <v-card-actions class="justify-end align-center">
-      <v-card-subtitle> 28/11/2023 por alibabá </v-card-subtitle>
+      <v-card-subtitle>
+        {{ timestampToDate(comment.created_at!) }} por
+        {{ comment.profiles.username }}
+      </v-card-subtitle>
       <BlogBtn
         color="warning"
         icon="mdi-pencil-outline"

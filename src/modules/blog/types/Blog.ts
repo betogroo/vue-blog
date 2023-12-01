@@ -25,6 +25,10 @@ export const PostWithProfileSchema = PostSchema.extend({
 export const PostsWithProfileSchema = z.array(PostWithProfileSchema)
 
 export const CommentsSchema = z.array(CommentSchema)
+export const CommentWithProfileSchema = CommentSchema.extend({
+  profiles: ProfileSchema,
+})
+export const CommentsWithProfileSchema = z.array(CommentWithProfileSchema)
 
 export const validationPostSchema = toTypedSchema(PostSchema)
 export const validationCommentSchema = toTypedSchema(CommentSchema)
@@ -32,3 +36,4 @@ export const validationCommentSchema = toTypedSchema(CommentSchema)
 export type Post = z.infer<typeof PostSchema>
 export type Comment = z.infer<typeof CommentSchema>
 export type PostWithProfile = z.infer<typeof PostWithProfileSchema>
+export type CommentWithProfile = z.infer<typeof CommentWithProfileSchema>

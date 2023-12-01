@@ -19,9 +19,8 @@ const {
   editPost: _editPost,
 } = usePost()
 
-const { getComment } = useComment()
+const { getComment, comments } = useComment()
 const profileStore = useProfileStore()
-const comments = 5
 
 const deletePost = async (id: number) => {
   try {
@@ -62,8 +61,9 @@ await getComment(props.id)
       <h2>Comentários</h2>
     </div>
     <PostComments
-      v-for="item in comments"
-      :key="item"
+      v-for="comment in comments"
+      :key="comment.id!"
+      :comment="comment"
     />
   </v-container>
 </template>
