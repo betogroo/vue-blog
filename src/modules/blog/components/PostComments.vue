@@ -2,10 +2,13 @@
 import BlogBtn from './btn/BlogBtn.vue'
 import { useHelpers, useText } from '@/shared/composables'
 
-import type { CommentWithProfile } from '../types/Blog'
+import type { CommentWithProfile, PostWithProfile } from '../types/Blog'
 
 interface Props {
+  user_id: string
+  post_id: number
   comment: CommentWithProfile
+  post: PostWithProfile
 }
 defineProps<Props>()
 
@@ -31,23 +34,28 @@ const { paragraph } = useText()
         </p>
       </template>
     </v-card-text>
-    <v-card-actions class="justify-end align-center">
+    <div class="d-flex justify-end align-center">
       <v-card-subtitle>
         {{ timestampToDate(comment.created_at!) }} por
         {{ comment.profiles.username }}
       </v-card-subtitle>
-      <BlogBtn
-        color="warning"
-        icon="mdi-pencil-outline"
-        text="Editar"
-        variant="elevated"
-      />
-      <BlogBtn
-        color="red"
-        icon="mdi-delete-outline"
-        text="Excluir"
-        variant="outlined"
-      />
-    </v-card-actions>
+
+      <v-card-actions>
+        <BlogBtn
+          v-if="user_id === comment.profiles.id"
+          color="warning"
+          icon="mdi-pencil-outline"
+          text="Editar"
+          variant="elevated"
+        />
+        <BlogBtn
+          v-if="user_id === comment.profiles.id || user_id === post.profiles.id"
+          color="red"
+          icon="mdi-delete-outline"
+          text="Excluir"
+          variant="outlined"
+        />
+      </v-card-actions>
+    </div>
   </v-card>
 </template>

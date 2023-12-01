@@ -45,9 +45,8 @@ await getComment(props.id)
 </script>
 
 <template>
-  <v-container>
+  <v-container v-if="post">
     <PostCard
-      v-if="post"
       :index-pending="indexPending === 0"
       :is-complete="true"
       :is-pending="postPending"
@@ -64,6 +63,10 @@ await getComment(props.id)
       v-for="comment in comments"
       :key="comment.id!"
       :comment="comment"
+      :post="post"
+      :post_id="id"
+      :user_id="profileStore.userProfile.id"
     />
   </v-container>
+  <v-container v-else> Este post nao existe </v-container>
 </template>
