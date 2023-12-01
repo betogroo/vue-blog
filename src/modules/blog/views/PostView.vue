@@ -22,7 +22,7 @@ const {
 
 const {
   addComment: _addComment,
-  getComment,
+  fetchComments,
   comments,
   isPending: commentPending,
 } = useComment()
@@ -55,7 +55,7 @@ const addComment = async (comment: Comment) => {
 }
 
 await getPost(props.id)
-await getComment(props.id)
+await fetchComments(props.id)
 </script>
 
 <template>

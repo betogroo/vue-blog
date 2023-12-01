@@ -21,7 +21,7 @@ const clearErrorAndSetPending = async (action: string, delay = false) => {
 }
 
 const useComment = () => {
-  const getComment = async (post_id: number) => {
+  const fetchComments = async (post_id: number) => {
     try {
       //error.value = null
       //isPending.value = true
@@ -69,7 +69,7 @@ const useComment = () => {
     }
   }
 
-  return { addComment, getComment, comments, isPending }
+  return { addComment, fetchComments, comments, isPending }
 }
 
 export default useComment
