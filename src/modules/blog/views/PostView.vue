@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { usePost, useComment } from '../composables'
 import { PostCard, PostComments, CommentForm } from '../components'
+import { useBlogStore } from '../store/useBlogStore'
 import { useProfileStore } from '@/modules/auth/store/useProfileStore'
 import type { Comment } from '../types/Blog'
 import { ref } from 'vue'
@@ -23,10 +24,10 @@ const {
 const {
   addComment: _addComment,
   fetchComments,
-  comments,
   isPending: commentPending,
 } = useComment()
 const profileStore = useProfileStore()
+const blogStore = useBlogStore()
 
 const deletePost = async (id: number) => {
   try {
@@ -49,6 +50,7 @@ const addComment = async (comment: Comment) => {
   try {
     const data = await _addComment(comment, user_id, post_id)
     if (!data) throw Error('Não foi possível comentar.')
+    await fetchComments(props.id)
   } catch (err) {
     console.log('BlogHome', err)
   }
@@ -77,7 +79,7 @@ await fetchComments(props.id)
       <h2>Comentários</h2>
     </div>
     <PostComments
-      v-for="comment in comments"
+      v-for="comment in blogStore.comments"
       :key="comment.id!"
       :comment="comment"
       :post="post"

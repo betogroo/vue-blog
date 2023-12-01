@@ -6,6 +6,7 @@ import {
   CommentsWithProfileSchema,
 } from '../types/Blog'
 import { useHelpers } from '@/shared/composables'
+import { useBlogStore } from '../store/useBlogStore'
 
 const comments = ref<CommentWithProfile[]>([])
 
@@ -21,10 +22,10 @@ const clearErrorAndSetPending = async (action: string, delay = false) => {
 }
 
 const useComment = () => {
+  const blogStore = useBlogStore()
   const fetchComments = async (post_id: number) => {
     try {
-      //error.value = null
-      //isPending.value = true
+      await clearErrorAndSetPending('fetchComments')
       const { data, error: err } = await supabase
         .from('comments')
         .select('*, profiles(id, username)')
@@ -33,14 +34,14 @@ const useComment = () => {
       if (err) throw err
       if (data) {
         const parsedData = CommentsWithProfileSchema.parse(data)
-        console.log(data)
         comments.value = parsedData
+        blogStore.comments = parsedData
       }
     } catch (err) {
       const e = err as Error
       console.log(e)
     } finally {
-      //isPending.value = false
+      isPending.value = false
     }
   }
 
