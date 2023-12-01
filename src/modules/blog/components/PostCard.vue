@@ -33,10 +33,6 @@ const handleDelete = (id: number) => {
 const handleEdit = (id: number) => {
   emit('handleEdit', id)
 }
-
-const handleComment = () => {
-  emit('handleComment')
-}
 </script>
 
 <template>
@@ -110,13 +106,6 @@ const handleComment = () => {
         >
       </template>
       <template v-else>
-        <v-btn
-          class="text-none"
-          color="green"
-          :ripple="false"
-          @click="handleComment"
-          >Comentar</v-btn
-        >
         <v-btn
           class="text-none"
           color="black"

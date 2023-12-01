@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { usePost, useComment } from '../composables'
-import { PostCard, PostComments } from '../components'
+import { PostCard, PostComments, CommentForm } from '../components'
 import { useProfileStore } from '@/modules/auth/store/useProfileStore'
+import type { Comment } from '../types/Blog'
 import { ref } from 'vue'
 
 const props = defineProps<Props>()
@@ -19,7 +20,12 @@ const {
   editPost: _editPost,
 } = usePost()
 
-const { getComment, comments } = useComment()
+const {
+  addComment: _addComment,
+  getComment,
+  comments,
+  isPending: commentPending,
+} = useComment()
 const profileStore = useProfileStore()
 
 const deletePost = async (id: number) => {
@@ -36,8 +42,16 @@ const editPost = async (id: number) => {
   await _editPost(id)
 }
 
-const commentPost = () => {
-  console.log('comment')
+const addComment = async (comment: Comment) => {
+  indexPending.value = 0
+  const user_id = profileStore.userProfile.id
+  const post_id = props.id
+  try {
+    const data = await _addComment(comment, user_id, post_id)
+    if (!data) throw Error('Não foi possível comentar.')
+  } catch (err) {
+    console.log('BlogHome', err)
+  }
 }
 
 await getPost(props.id)
@@ -52,9 +66,12 @@ await getComment(props.id)
       :is-pending="postPending"
       :post="post"
       :user_id="profileStore.userProfile.id"
-      @handle-comment="commentPost"
       @handle-delete="deletePost(id)"
       @handle-edit="editPost(id)"
+    />
+    <CommentForm
+      :is-pending="indexPending === 0 && commentPending === 'addComment'"
+      @submit-comment="(comment) => addComment(comment)"
     />
     <div class="d-flex">
       <h2>Comentários</h2>
