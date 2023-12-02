@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { toRefs } from 'vue'
-import BlogBtn from './btn/BlogBtn.vue'
+import { BtnOrIcon } from '@/shared/components'
 import { PostWithProfile } from '../types/Blog'
 import { useHelpers, useText } from '@/shared/composables'
 
@@ -53,7 +53,7 @@ const handleEdit = (id: number) => {
             v-if="user_id === post.profiles.id"
             class="d-flex justify-end align-center ma-0 pa-0"
           >
-            <BlogBtn
+            <BtnOrIcon
               color="warning"
               icon="mdi-pencil-outline"
               :loading="isPending === 'editPost' && indexPending"
@@ -61,7 +61,7 @@ const handleEdit = (id: number) => {
               variant="elevated"
               @handle-click="handleEdit(id!)"
             />
-            <BlogBtn
+            <BtnOrIcon
               color="red"
               icon="mdi-delete-outline"
               :loading="isPending === 'deletePost' && indexPending"

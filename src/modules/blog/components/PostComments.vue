@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BlogBtn from './btn/BlogBtn.vue'
+import { BtnOrIcon } from '@/shared/components'
 import { useHelpers, useText } from '@/shared/composables'
 
 import type { CommentWithProfile, PostWithProfile } from '../types/Blog'
@@ -41,14 +41,14 @@ const { paragraph } = useText()
       </v-card-subtitle>
 
       <v-card-actions>
-        <BlogBtn
+        <BtnOrIcon
           v-if="user_id === comment.profiles.id"
           color="warning"
           icon="mdi-pencil-outline"
           text="Editar"
           variant="elevated"
         />
-        <BlogBtn
+        <BtnOrIcon
           v-if="user_id === comment.profiles.id || user_id === post.profiles.id"
           color="red"
           icon="mdi-delete-outline"
