@@ -83,7 +83,12 @@ const useComment = () => {
   const deleteComment = async (id: number | string) => {
     try {
       await clearErrorAndSetPending('deleteComment', true)
-      console.log('Vai deletar o', id)
+      const { error: err } = await supabase
+        .from('comments')
+        .delete()
+        .eq('id', id)
+      if (err) throw err
+      return true
     } catch (err) {
       error.value = handleError(err)
     } finally {

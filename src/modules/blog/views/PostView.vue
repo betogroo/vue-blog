@@ -50,7 +50,11 @@ const editComment = async (id: number | string) => {
 }
 const deleteComment = async (id: number | string) => {
   indexPending.value = blogStore.comments.findIndex((item) => item.id === id)
-  await _deleteComment(id)
+  try {
+    if (await _deleteComment(id)) await fetchComments(props.id)
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 const addComment = async (comment: Comment) => {
