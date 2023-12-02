@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePost, useComment } from '../composables'
-import { PostCard, PostComments, CommentForm } from '../components'
+import { PostCard, CommentCard, CommentForm } from '../components'
 import { useBlogStore } from '../store/useBlogStore'
 import { useProfileStore } from '@/modules/auth/store/useProfileStore'
 import type { Comment } from '../types/Blog'
@@ -78,7 +78,7 @@ await fetchComments(props.id)
     <div class="d-flex">
       <h2>Comentários</h2>
     </div>
-    <PostComments
+    <CommentCard
       v-for="comment in blogStore.comments"
       :key="comment.id!"
       :comment="comment"

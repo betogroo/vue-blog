@@ -1,6 +1,6 @@
 import PostForm from './PostForm.vue'
 import CommentForm from './CommentForm.vue'
 import PostCard from './PostCard.vue'
-import PostComments from './PostComments.vue'
+import CommentCard from './CommentCard.vue'
 
-export { PostCard, PostForm, CommentForm, PostComments }
+export { PostCard, PostForm, CommentForm, CommentCard }
