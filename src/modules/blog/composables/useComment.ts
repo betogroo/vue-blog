@@ -31,6 +31,7 @@ const useComment = () => {
         .select('*, profiles(id, username)')
         .eq('post_id', post_id)
         .order('created_at', { ascending: false })
+        .returns<CommentWithProfile[]>()
       if (err) throw err
       if (data) {
         const parsedData = CommentsWithProfileSchema.parse(data)
@@ -57,8 +58,8 @@ const useComment = () => {
         .from('comments')
         .insert(commentData)
         .select()
+        .returns<Comment>()
         .single()
-      console.log(commentData)
       if (err || !data) {
         return
       }

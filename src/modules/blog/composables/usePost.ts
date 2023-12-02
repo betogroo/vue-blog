@@ -32,6 +32,7 @@ const usePost = () => {
         .from('post')
         .select('id, title, text, created_at, profiles(id, username)')
         .order('created_at', { ascending: false })
+        .returns<PostWithProfile[]>()
 
       if (err) throw err
       if (data) {
@@ -53,7 +54,9 @@ const usePost = () => {
         .from('post')
         .select('id, title, text, created_at, profiles(id, username)')
         .eq('id', id)
+        .returns<PostWithProfile>()
         .single()
+
       if (err) throw err
       if (data) {
         const parsedData = PostWithProfileSchema.parse(data)
@@ -74,8 +77,10 @@ const usePost = () => {
         .from('post')
         .insert(postData)
         .select()
+        .returns<Post>()
         .single()
       if (err || !data) throw Error('Não foi possível postar')
+      console.log(data)
       return data
     } catch (err) {
       error.value = handleError(err)
