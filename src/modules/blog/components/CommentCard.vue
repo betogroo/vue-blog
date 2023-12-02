@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BtnOrIcon } from '@/shared/components/'
+import { DataActions } from '.'
 import { useHelpers, useText } from '@/shared/composables'
 
 import type { CommentWithProfile, PostWithProfile } from '../types/Blog'
@@ -9,11 +9,26 @@ interface Props {
   post_id: number
   comment: CommentWithProfile
   post: PostWithProfile
+  isPending?: string | false
+  indexPending?: boolean
 }
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  isPending: false,
+})
 
+const emit = defineEmits<{
+  handleDelete: [id: number | string]
+  handleEdit: [id: number | string]
+}>()
 const { timestampToDate } = useHelpers()
 const { paragraph } = useText()
+
+const handleDelete = (id: number | string) => {
+  emit('handleDelete', id)
+}
+const handleEdit = (id: number | string) => {
+  emit('handleEdit', id)
+}
 </script>
 
 <template>
@@ -41,19 +56,16 @@ const { paragraph } = useText()
       </v-card-subtitle>
 
       <v-card-actions>
-        <BtnOrIcon
-          v-if="user_id === comment.profiles.id"
-          color="warning"
-          icon="mdi-pencil-outline"
-          text="Editar"
-          variant="elevated"
-        />
-        <BtnOrIcon
-          v-if="user_id === comment.profiles.id || user_id === post.profiles.id"
-          color="red"
-          icon="mdi-delete-outline"
-          text="Excluir"
-          variant="outlined"
+        <DataActions
+          :id="post_id"
+          :is-delete-pending="isPending === 'deleteComment' && indexPending"
+          :is-delete-visible="
+            user_id === comment.profiles.id || user_id === post.profiles.id
+          "
+          :is-edit-pending="isPending === 'editComment' && indexPending"
+          :is-edit-visible="user_id === comment.profiles.id"
+          @handle-delete="(id: string | number) => handleDelete(id)"
+          @handle-edit="(id: string | number) => handleEdit(id)"
         />
       </v-card-actions>
     </div>

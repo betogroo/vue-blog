@@ -70,7 +70,35 @@ const useComment = () => {
     }
   }
 
-  return { addComment, fetchComments, comments, isPending }
+  const editComment = async (id: number | string) => {
+    try {
+      await clearErrorAndSetPending('editComment', true)
+      console.log('Vai editar o', id)
+    } catch (err) {
+      error.value = handleError(err)
+    } finally {
+      isPending.value = false
+    }
+  }
+  const deleteComment = async (id: number | string) => {
+    try {
+      await clearErrorAndSetPending('deleteComment', true)
+      console.log('Vai deletar o', id)
+    } catch (err) {
+      error.value = handleError(err)
+    } finally {
+      isPending.value = false
+    }
+  }
+
+  return {
+    addComment,
+    editComment,
+    deleteComment,
+    fetchComments,
+    comments,
+    isPending,
+  }
 }
 
 export default useComment

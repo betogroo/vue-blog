@@ -24,6 +24,8 @@ const {
 const {
   addComment: _addComment,
   fetchComments,
+  editComment: _editComment,
+  deleteComment: _deleteComment,
   isPending: commentPending,
 } = useComment()
 const profileStore = useProfileStore()
@@ -41,6 +43,14 @@ const deletePost = async (id: number) => {
 const editPost = async (id: number) => {
   indexPending.value = 0
   await _editPost(id)
+}
+const editComment = async (id: number | string) => {
+  indexPending.value = blogStore.comments.findIndex((item) => item.id === id)
+  await _editComment(id)
+}
+const deleteComment = async (id: number | string) => {
+  indexPending.value = blogStore.comments.findIndex((item) => item.id === id)
+  await _deleteComment(id)
 }
 
 const addComment = async (comment: Comment) => {
@@ -79,12 +89,16 @@ await fetchComments(props.id)
       <h2>Comentários</h2>
     </div>
     <CommentCard
-      v-for="comment in blogStore.comments"
+      v-for="(comment, i) in blogStore.comments"
       :key="comment.id!"
       :comment="comment"
+      :index-pending="indexPending === i"
+      :is-pending="commentPending"
       :post="post"
       :post_id="id"
       :user_id="profileStore.userProfile.id"
+      @handle-delete="(id) => deleteComment(comment.id!)"
+      @handle-edit="(id) => editComment(comment.id!)"
     />
   </v-container>
   <v-container v-else> Este post nao existe </v-container>

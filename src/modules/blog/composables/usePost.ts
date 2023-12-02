@@ -59,7 +59,6 @@ const usePost = () => {
         const parsedData = PostWithProfileSchema.parse(data)
         post.value = parsedData
       }
-      console.log(data)
     } catch (err) {
       error.value = handleError(err)
     } finally {

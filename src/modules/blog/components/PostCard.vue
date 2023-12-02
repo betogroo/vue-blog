@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { toRefs } from 'vue'
-import { BtnOrIcon } from '@/shared/components'
+import { DataActions } from './'
 import { PostWithProfile } from '../types/Blog'
 import { useHelpers, useText } from '@/shared/composables'
 
@@ -18,19 +18,18 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  handleDelete: [id: number]
-  handleEdit: [id: number]
-  handleComment: []
+  handleDelete: [id: number | string]
+  handleEdit: [id: number | string]
 }>()
 
 const { id, title, created_at, text, profiles } = toRefs(props.post)
 const { timestampToDate } = useHelpers()
 const { limitText, paragraph } = useText()
 
-const handleDelete = (id: number) => {
+const handleDelete = (id: number | string) => {
   emit('handleDelete', id)
 }
-const handleEdit = (id: number) => {
+const handleEdit = (id: number | string) => {
   emit('handleEdit', id)
 }
 </script>
@@ -53,21 +52,12 @@ const handleEdit = (id: number) => {
             v-if="user_id === post.profiles.id"
             class="d-flex justify-end align-center ma-0 pa-0"
           >
-            <BtnOrIcon
-              color="warning"
-              icon="mdi-pencil-outline"
-              :loading="isPending === 'editPost' && indexPending"
-              text="Editar"
-              variant="elevated"
-              @handle-click="handleEdit(id!)"
-            />
-            <BtnOrIcon
-              color="red"
-              icon="mdi-delete-outline"
-              :loading="isPending === 'deletePost' && indexPending"
-              text="Excluir"
-              variant="outlined"
-              @handle-click="handleDelete(id!)"
+            <DataActions
+              :id="+id!"
+              :is-delete-pending="isPending === 'deletePost' && indexPending"
+              :is-edit-pending="isPending === 'editPost' && indexPending"
+              @handle-delete="(id) => handleDelete(id)"
+              @handle-edit="(id) => handleEdit(id)"
             />
           </v-card-actions>
         </v-col>
