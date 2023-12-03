@@ -59,7 +59,6 @@ const useComment = () => {
         .insert(commentData)
         .select()
         .returns<Comment>()
-        .single()
       if (err || !data) {
         return
       }

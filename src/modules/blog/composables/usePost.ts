@@ -56,7 +56,6 @@ const usePost = () => {
         .eq('id', id)
         .returns<PostWithProfile>()
         .single()
-
       if (err) throw err
       if (data) {
         const parsedData = PostWithProfileSchema.parse(data)
@@ -78,7 +77,6 @@ const usePost = () => {
         .insert(postData)
         .select()
         .returns<Post>()
-        .single()
       if (err || !data) throw Error('Não foi possível postar')
       console.log(data)
       return data
