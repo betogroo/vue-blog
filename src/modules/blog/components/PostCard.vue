@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { toRefs } from 'vue'
-import BlogBtn from './btn/BlogBtn.vue'
+import { DataActions } from './'
 import { PostWithProfile } from '../types/Blog'
 import { useHelpers, useText } from '@/shared/composables'
 
@@ -18,18 +18,18 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  handleDelete: [id: number]
-  handleEdit: [id: number]
+  handleDelete: [id: number | string]
+  handleEdit: [id: number | string]
 }>()
 
 const { id, title, created_at, text, profiles } = toRefs(props.post)
 const { timestampToDate } = useHelpers()
 const { limitText, paragraph } = useText()
 
-const handleDelete = (id: number) => {
+const handleDelete = (id: number | string) => {
   emit('handleDelete', id)
 }
-const handleEdit = (id: number) => {
+const handleEdit = (id: number | string) => {
   emit('handleEdit', id)
 }
 </script>
@@ -37,7 +37,7 @@ const handleEdit = (id: number) => {
 <template>
   <v-card
     class="my-1"
-    variant="outlined"
+    :variant="isComplete ? 'text' : 'outlined'"
   >
     <v-card-item class="ml-2 pt-0">
       <v-row
@@ -52,21 +52,12 @@ const handleEdit = (id: number) => {
             v-if="user_id === post.profiles.id"
             class="d-flex justify-end align-center ma-0 pa-0"
           >
-            <BlogBtn
-              color="warning"
-              icon="mdi-pencil-outline"
-              :loading="isPending === 'editPost' && indexPending"
-              text="Editar"
-              variant="elevated"
-              @handle-click="handleEdit(id!)"
-            />
-            <BlogBtn
-              color="red"
-              icon="mdi-delete-outline"
-              :loading="isPending === 'deletePost' && indexPending"
-              text="Excluir"
-              variant="outlined"
-              @handle-click="handleDelete(id!)"
+            <DataActions
+              :id="+id!"
+              :is-delete-pending="isPending === 'deletePost' && indexPending"
+              :is-edit-pending="isPending === 'editPost' && indexPending"
+              @handle-delete="(id) => handleDelete(id)"
+              @handle-edit="(id) => handleEdit(id)"
             />
           </v-card-actions>
         </v-col>
@@ -95,28 +86,24 @@ const handleEdit = (id: number) => {
       </template>
     </v-card-text>
     <v-card-actions class="pa-0 mr-2 justify-end">
-      <v-btn
-        v-if="!isComplete"
-        class="text-none"
-        color="black"
-        :ripple="false"
-        :to="{ name: 'PostView', params: { id: post.id } }"
-        >Ver post completo</v-btn
-      >
-      <v-btn
-        v-else
-        class="text-none"
-        color="black"
-        :ripple="false"
-        :to="{ name: 'BlogHome' }"
-        >Voltar</v-btn
-      >
+      <template v-if="!isComplete">
+        <v-btn
+          class="text-none"
+          color="black"
+          :ripple="false"
+          :to="{ name: 'PostView', params: { id: post.id } }"
+          >Ver post completo</v-btn
+        >
+      </template>
+      <template v-else>
+        <v-btn
+          class="text-none"
+          color="black"
+          :ripple="false"
+          :to="{ name: 'BlogHome' }"
+          >Voltar</v-btn
+        >
+      </template>
     </v-card-actions>
   </v-card>
 </template>
-
-<style lang="scss" scoped>
-.text-indent {
-  text-indent: 2rem;
-}
-</style>

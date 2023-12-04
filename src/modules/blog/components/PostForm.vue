@@ -42,7 +42,7 @@ const onSubmit = handleSubmit(async () => {
           clearable
           :counter="5000"
           :error-messages="text.errorMessage.value"
-          label="Label"
+          label="Texto"
           variant="outlined"
         >
         </v-textarea>

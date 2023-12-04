@@ -7,7 +7,7 @@ import { useProfileStore } from '@/modules/auth/store/useProfileStore'
 import AppDialogFull from '@/shared/components/app/AppDialogFull.vue'
 import { Post } from '../types/Blog'
 
-const indexLoading = ref<number | string>(-1)
+const indexPending = ref<number | string>(-1)
 
 const blogStore = useBlogStore()
 
@@ -21,24 +21,24 @@ const {
 } = usePost()
 const profileStore = useProfileStore()
 
-const deletePost = async (id: number) => {
-  indexLoading.value = posts.value.findIndex((item) => item.id === id)
+const deletePost = async (id: number | string) => {
+  indexPending.value = posts.value.findIndex((item) => item.id === id)
   try {
-    await _deletePost(id)
-    indexLoading.value = -1
+    await _deletePost(+id)
+    indexPending.value = -1
   } catch (error) {
     console.error('deletePost', error)
   }
 }
 
-const editPost = async (id: number) => {
-  indexLoading.value = posts.value.findIndex((item) => item.id === id)
-  await _editPost(id)
-  indexLoading.value = -1
+const editPost = async (id: number | string) => {
+  indexPending.value = posts.value.findIndex((item) => item.id === id)
+  await _editPost(+id)
+  indexPending.value = -1
 }
 
 const submitPost = async (post: Post) => {
-  indexLoading.value = 'submitPost'
+  indexPending.value = 'submitPost'
   const user_id = profileStore.userProfile.id
   try {
     const data = await addPost(post, user_id)
@@ -78,7 +78,7 @@ await fetchPosts()
     <PostCard
       v-for="(post, i) in blogStore.posts"
       :key="post.id!"
-      :index-pending="indexLoading === i"
+      :index-pending="indexPending === i"
       :is-pending="postPending"
       :post="post"
       :user_id="profileStore.userProfile.id"
