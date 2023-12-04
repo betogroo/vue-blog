@@ -27,10 +27,12 @@ const useProfile = () => {
         status,
       } = await supabase
         .from('profiles')
-        .select('id, username, website, avatar_url, full_name, updated_at')
+        .select('*')
         .eq('id', id)
+        .returns<Profile[]>()
         .single()
       if (err && status !== 406) throw err
+      console.log('getProfile', data)
       if (data) {
         const parsedData = ProfileSchema.parse(data)
         store.profile = parsedData
