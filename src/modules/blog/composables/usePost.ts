@@ -10,6 +10,7 @@ import {
   PostsWithProfileSchema,
   PostWithProfileSchema,
 } from '../types/Blog'
+import { storeToRefs } from 'pinia'
 
 const posts = ref<PostWithProfile[]>([])
 const post = ref<PostWithProfile>()
@@ -19,6 +20,8 @@ const { handleError } = useHelpers()
 const usePost = () => {
   const blogStore = useBlogStore()
   const feedbackStore = useFeedbackStore()
+
+  const { error, isPending } = storeToRefs(feedbackStore)
 
   const fetchPosts = async () => {
     try {
@@ -107,6 +110,8 @@ const usePost = () => {
     }
   }
   return {
+    error,
+    isPending,
     post,
     posts,
     addPost,

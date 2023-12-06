@@ -9,6 +9,7 @@ import { useHelpers } from '@/shared/composables'
 
 import { useBlogStore } from '../store/useBlogStore'
 import { useFeedbackStore } from '@/shared/store/useFeedbackStore'
+import { storeToRefs } from 'pinia'
 
 const comments = ref<CommentWithProfile[]>([])
 const { handleError } = useHelpers()
@@ -16,6 +17,8 @@ const { handleError } = useHelpers()
 const useComment = () => {
   const blogStore = useBlogStore()
   const feedbackStore = useFeedbackStore()
+
+  const { error, isPending } = storeToRefs(feedbackStore)
 
   const fetchComments = async (post_id: number) => {
     try {
@@ -91,11 +94,13 @@ const useComment = () => {
   }
 
   return {
-    addComment,
-    editComment,
-    deleteComment,
-    fetchComments,
     comments,
+    error,
+    isPending,
+    addComment,
+    deleteComment,
+    editComment,
+    fetchComments,
   }
 }
 
