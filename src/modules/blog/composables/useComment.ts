@@ -6,26 +6,20 @@ import {
   CommentsWithProfileSchema,
 } from '../types/Blog'
 import { useHelpers } from '@/shared/composables'
+
 import { useBlogStore } from '../store/useBlogStore'
+import { useFeedbackStore } from '@/shared/store/useFeedbackStore'
 
 const comments = ref<CommentWithProfile[]>([])
-
-const { delay: _delay, handleError } = useHelpers()
-
-const isPending = ref<string | false>(false)
-const error = ref<string | null>(null)
-
-const clearErrorAndSetPending = async (action: string, delay = false) => {
-  error.value = null
-  isPending.value = action
-  if (delay) await _delay()
-}
+const { handleError } = useHelpers()
 
 const useComment = () => {
   const blogStore = useBlogStore()
+  const feedbackStore = useFeedbackStore()
+
   const fetchComments = async (post_id: number) => {
     try {
-      await clearErrorAndSetPending('fetchComments')
+      await feedbackStore.clearErrorAndSetPending('fetchComments')
       const { data, error: err } = await supabase
         .from('comments')
         .select('*, profiles(id, username)')
@@ -42,7 +36,7 @@ const useComment = () => {
       const e = err as Error
       console.log(e)
     } finally {
-      isPending.value = false
+      feedbackStore.isPending = false
     }
   }
 
@@ -53,7 +47,7 @@ const useComment = () => {
   ) => {
     try {
       const commentData = { ...comment, user_id, post_id }
-      await clearErrorAndSetPending('addComment', true)
+      await feedbackStore.clearErrorAndSetPending('addComment', true)
       const { data, error: err } = await supabase
         .from('comments')
         .insert(commentData)
@@ -64,25 +58,25 @@ const useComment = () => {
       }
       return data
     } catch (err) {
-      error.value = handleError(err)
+      feedbackStore.error = handleError(err)
     } finally {
-      isPending.value = false
+      feedbackStore.isPending = false
     }
   }
 
   const editComment = async (id: number | string) => {
     try {
-      await clearErrorAndSetPending('editComment', true)
+      await feedbackStore.clearErrorAndSetPending('editComment', true)
       console.log('Vai editar o', id)
     } catch (err) {
-      error.value = handleError(err)
+      feedbackStore.error = handleError(err)
     } finally {
-      isPending.value = false
+      feedbackStore.isPending = false
     }
   }
   const deleteComment = async (id: number | string) => {
     try {
-      await clearErrorAndSetPending('deleteComment', true)
+      await feedbackStore.clearErrorAndSetPending('deleteComment', true)
       const { error: err } = await supabase
         .from('comments')
         .delete()
@@ -90,9 +84,9 @@ const useComment = () => {
       if (err) throw err
       return true
     } catch (err) {
-      error.value = handleError(err)
+      feedbackStore.error = handleError(err)
     } finally {
-      isPending.value = false
+      feedbackStore.isPending = false
     }
   }
 
@@ -102,7 +96,6 @@ const useComment = () => {
     deleteComment,
     fetchComments,
     comments,
-    isPending,
   }
 }
 
