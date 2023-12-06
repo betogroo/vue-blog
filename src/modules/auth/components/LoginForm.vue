@@ -3,7 +3,7 @@ import { Credentials, validationLoginSchema } from '../types/Auth'
 import { useField, useForm } from 'vee-validate'
 
 interface Props {
-  isPending?: string | false
+  isPending?: string | boolean
 }
 withDefaults(defineProps<Props>(), {
   isPending: false,

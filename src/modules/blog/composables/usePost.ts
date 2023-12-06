@@ -91,7 +91,8 @@ const usePost = () => {
       await feedbackStore.clearErrorAndSetPending('deletePost')
       const { error: err } = await supabase.from('post').delete().eq('id', id)
       if (err) throw err
-      await fetchPosts()
+      return true
+      //await fetchPosts()
     } catch (err) {
       feedbackStore.error = handleError(err)
     } finally {

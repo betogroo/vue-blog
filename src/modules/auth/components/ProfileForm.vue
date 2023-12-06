@@ -6,7 +6,7 @@ import { useField, useForm } from 'vee-validate'
 interface Props {
   user: User
   profile: Profile
-  isPending?: string | false
+  isPending?: string | boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   isPending: false,

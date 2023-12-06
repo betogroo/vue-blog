@@ -2,7 +2,7 @@
 import { type Post, validationPostSchema } from '../types/Blog'
 import { useField, useForm } from 'vee-validate'
 interface Props {
-  isPending?: string | false
+  isPending?: string | boolean
 }
 withDefaults(defineProps<Props>(), {
   isPending: false,
