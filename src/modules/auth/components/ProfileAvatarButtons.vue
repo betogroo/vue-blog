@@ -2,7 +2,7 @@
 import { AppFileBtn } from '@/shared/components'
 interface Props {
   editMode?: boolean
-  isPending?: string | false
+  isPending?: string | boolean
 }
 withDefaults(defineProps<Props>(), {
   editMode: false,

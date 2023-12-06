@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { usePost, useComment } from '../composables'
+import { useRouter } from 'vue-router'
 import { PostCard, CommentCard, CommentForm } from '../components'
 import { useBlogStore } from '../store/useBlogStore'
 import { useProfileStore } from '@/modules/auth/store/useProfileStore'
@@ -12,6 +13,7 @@ interface Props {
   id: number
 }
 
+// composable
 const indexPending = ref(-1)
 const {
   getPost,
@@ -28,13 +30,21 @@ const {
   deleteComment: _deleteComment,
   isPending: commentPending,
 } = useComment()
+
+const { push } = useRouter()
+
+//store
 const profileStore = useProfileStore()
 const blogStore = useBlogStore()
 
 const deletePost = async (id: number) => {
   try {
     indexPending.value = 0
-    await _deletePost(id)
+    const isDeleted = await _deletePost(id)
+    if (isDeleted) {
+      alert('Foi deletado, vamos fazer uma coisa bonitinha depois')
+      push({ name: 'BlogHome' })
+    }
   } catch (error) {
     console.error('deletePost', error)
   }

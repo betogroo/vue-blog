@@ -1,21 +1,16 @@
-import { ref } from 'vue'
 import { supabase } from '@/plugins/supabase'
 import { useHelpers } from '@/shared/composables'
-const { delay, handleError } = useHelpers()
+const { delay: _delay, handleError } = useHelpers()
 
 import { useAvatarStore } from '../store/useAvatarStore'
-
-const isPending = ref<string | false>(false)
-const error = ref<string | null>(null)
-
-const clearErrorAndSetPending = async (action: string) => {
-  error.value = null
-  isPending.value = action
-  await delay()
-}
+import { useFeedbackStore } from '@/shared/store/useFeedbackStore'
+import { storeToRefs } from 'pinia'
 
 const useAvatar = () => {
   const store = useAvatarStore()
+  const feedbackStore = useFeedbackStore()
+
+  const { error, isPending } = storeToRefs(feedbackStore)
 
   const downloadImage = async (avatar_url: string | null | undefined) => {
     try {
@@ -26,7 +21,7 @@ const useAvatar = () => {
       if (err) throw err
       store.src = URL.createObjectURL(data)
     } catch (err) {
-      error.value = handleError(err)
+      feedbackStore.error = handleError(err)
     }
   }
 
@@ -47,7 +42,7 @@ const useAvatar = () => {
 
   const updateAvatar = async () => {
     try {
-      clearErrorAndSetPending('updateAvatar')
+      feedbackStore.clearErrorAndSetPending('updateAvatar', true)
       if (!store.file) throw new Error('Nenhuma imagem foi selecionada')
       const fileExt = store.file.name.split('.').pop()
       const filePath = `${Date.now()}.${fileExt}`
@@ -56,15 +51,16 @@ const useAvatar = () => {
         .from('avatars')
         .upload(filePath, store.file)
       if (uploadError) throw uploadError
+      await _delay()
       store.editMode = false
       return data.path
     } catch (err) {
-      error.value = handleError(err)
+      feedbackStore.error = handleError(err)
     } finally {
-      isPending.value = false
+      feedbackStore.isPending = false
     }
   }
-  return { isPending, error, updateAvatar, handleFile, downloadImage }
+  return { error, isPending, downloadImage, handleFile, updateAvatar }
 }
 
 export default useAvatar

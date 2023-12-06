@@ -2,32 +2,30 @@ import { ref } from 'vue'
 import { useHelpers } from '@/shared/composables'
 import { supabase } from '@/plugins/supabase'
 import { useBlogStore } from '../store/useBlogStore'
+import { useFeedbackStore } from '@/shared/store/useFeedbackStore'
+
 import {
   type PostWithProfile,
   type Post,
   PostsWithProfileSchema,
   PostWithProfileSchema,
 } from '../types/Blog'
+import { storeToRefs } from 'pinia'
 
 const posts = ref<PostWithProfile[]>([])
 const post = ref<PostWithProfile>()
 
-const { delay: _delay, handleError } = useHelpers()
-
-const isPending = ref<string | false>(false)
-const error = ref<string | null>(null)
-
-const clearErrorAndSetPending = async (action: string, delay = false) => {
-  error.value = null
-  isPending.value = action
-  if (delay) await _delay()
-}
+const { handleError } = useHelpers()
 
 const usePost = () => {
   const blogStore = useBlogStore()
+  const feedbackStore = useFeedbackStore()
+
+  const { error, isPending } = storeToRefs(feedbackStore)
+
   const fetchPosts = async () => {
     try {
-      await clearErrorAndSetPending('fetchPosts')
+      await feedbackStore.clearErrorAndSetPending('fetchPosts')
       const { data, error: err } = await supabase
         .from('post')
         .select('id, title, text, created_at, profiles(id, username)')
@@ -41,15 +39,15 @@ const usePost = () => {
         blogStore.posts = parsedData
       }
     } catch (err) {
-      error.value = handleError(err)
+      feedbackStore.error = handleError(err)
     } finally {
-      isPending.value = false
+      feedbackStore.isPending = false
     }
   }
 
   const getPost = async (id: number) => {
     try {
-      await clearErrorAndSetPending('getPost')
+      await feedbackStore.clearErrorAndSetPending('getPost')
       const { data, error: err } = await supabase
         .from('post')
         .select('id, title, text, created_at, profiles(id, username)')
@@ -63,16 +61,16 @@ const usePost = () => {
         post.value = parsedData
       }
     } catch (err) {
-      error.value = handleError(err)
+      feedbackStore.error = handleError(err)
     } finally {
-      isPending.value = false
+      feedbackStore.isPending = false
     }
   }
 
   const addPost = async (post: Post, user_id: string) => {
     try {
       const postData = { ...post, user_id }
-      await clearErrorAndSetPending('addPost')
+      await feedbackStore.clearErrorAndSetPending('addPost')
       const { data, error: err } = await supabase
         .from('post')
         .insert(postData)
@@ -83,37 +81,38 @@ const usePost = () => {
       console.log(data)
       return data
     } catch (err) {
-      error.value = handleError(err)
+      feedbackStore.error = handleError(err)
     } finally {
-      isPending.value = false
+      feedbackStore.isPending = false
     }
   }
   const deletePost = async (id: number) => {
     try {
-      await clearErrorAndSetPending('deletePost')
+      await feedbackStore.clearErrorAndSetPending('deletePost')
       const { error: err } = await supabase.from('post').delete().eq('id', id)
       if (err) throw err
-      await fetchPosts()
+      return true
+      //await fetchPosts()
     } catch (err) {
-      error.value = handleError(err)
+      feedbackStore.error = handleError(err)
     } finally {
-      isPending.value = false
+      feedbackStore.isPending = false
     }
   }
 
   const editPost = async (id: number) => {
     try {
-      await clearErrorAndSetPending('editPost', true)
+      await feedbackStore.clearErrorAndSetPending('editPost', true)
       console.log(id)
     } catch (err) {
-      error.value = handleError(err)
+      feedbackStore.error = handleError(err)
     } finally {
-      isPending.value = false
+      feedbackStore.isPending = false
     }
   }
   return {
-    isPending,
     error,
+    isPending,
     post,
     posts,
     addPost,

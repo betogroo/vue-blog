@@ -9,8 +9,7 @@ import { Post } from '../types/Blog'
 
 const indexPending = ref<number | string>(-1)
 
-const blogStore = useBlogStore()
-
+// composable
 const {
   deletePost: _deletePost,
   editPost: _editPost,
@@ -19,13 +18,19 @@ const {
   isPending: postPending,
   posts,
 } = usePost()
+
+// store
+const blogStore = useBlogStore()
 const profileStore = useProfileStore()
 
 const deletePost = async (id: number | string) => {
   indexPending.value = posts.value.findIndex((item) => item.id === id)
   try {
-    await _deletePost(+id)
-    indexPending.value = -1
+    const isDeleted = await _deletePost(+id)
+    if (isDeleted) {
+      indexPending.value = -1
+      await fetchPosts()
+    }
   } catch (error) {
     console.error('deletePost', error)
   }

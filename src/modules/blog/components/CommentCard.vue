@@ -9,7 +9,7 @@ interface Props {
   post_id: number
   comment: CommentWithProfile
   post: PostWithProfile
-  isPending?: string | false
+  isPending?: string | boolean
   indexPending?: boolean
 }
 withDefaults(defineProps<Props>(), {
