@@ -50,15 +50,15 @@ const usePost = () => {
       await feedbackStore.clearErrorAndSetPending('getPost')
       const { data, error: err } = await supabase
         .from('post')
-        .select('id, title, text, created_at, profiles(id, username)')
+        .select('*, profiles(id, username)')
         .eq('id', id)
         .returns<PostWithProfile[]>()
         .single()
       if (err) throw err
-      console.log(data)
       if (data) {
         const parsedData = PostWithProfileSchema.parse(data)
         post.value = parsedData
+        return data
       }
     } catch (err) {
       feedbackStore.error = handleError(err)
