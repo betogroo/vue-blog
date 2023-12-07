@@ -33,8 +33,8 @@ const deletePost = async (id: number | string) => {
   try {
     const isDeleted = await _deletePost(+id)
     if (isDeleted) {
-      indexPending.value = -1
       await fetchPosts()
+      indexPending.value = -1
     }
   } catch (error) {
     console.error('deletePost', error)
@@ -42,9 +42,19 @@ const deletePost = async (id: number | string) => {
 }
 
 const toggleEditPost = async (id: number) => {
-  toggleDialog('editPost')
   await getPost(id)
-  console.log(_post.value)
+  toggleDialog('editPost')
+}
+
+const editPost = async (post: Post) => {
+  try {
+    const data = await _editPost(post)
+    if (!data) throw Error('Não foi possível Editar.')
+    await fetchPosts()
+    toggleDialog('')
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const submitPost = async (post: Post) => {
@@ -103,6 +113,7 @@ await fetchPosts()
       v-else
       :is-pending="postPending"
       :post="_post"
+      @submit-post="(post) => editPost(post)"
     />
   </AppDialogFull>
 </template>

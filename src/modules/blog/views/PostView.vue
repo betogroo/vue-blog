@@ -50,7 +50,7 @@ const deletePost = async (id: number) => {
   }
 }
 
-const editPost = async (id: number) => {
+const editPost = async (id: number | any) => {
   indexPending.value = 0
   await _editPost(id)
 }
