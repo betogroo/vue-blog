@@ -1,13 +1,9 @@
 <script setup lang="ts">
 interface Props {
-  buttonColor?: string
-  buttonTitle?: string
-  icon?: string
+  title?: string
 }
 withDefaults(defineProps<Props>(), {
-  buttonColor: 'primary',
-  buttonTitle: 'Open Dialog',
-  icon: 'mdi-plus',
+  title: '',
 })
 
 /* import { ref, watchEffect } from 'vue'
@@ -34,16 +30,6 @@ const dialog = defineModel<boolean>()
     :scrim="false"
     transition="dialog-bottom-transition"
   >
-    <template v-slot:activator="{ props }">
-      <v-btn
-        class="text-none"
-        :color="buttonColor"
-        :prepend-icon="icon"
-        v-bind="props"
-      >
-        {{ buttonTitle }}
-      </v-btn>
-    </template>
     <v-card>
       <v-toolbar
         class="mb-3"
@@ -56,7 +42,7 @@ const dialog = defineModel<boolean>()
         >
           <v-icon>mdi-close</v-icon>
         </v-btn>
-        <v-toolbar-title>Novo Post</v-toolbar-title>
+        <v-toolbar-title>{{ title }}</v-toolbar-title>
         <v-spacer></v-spacer>
       </v-toolbar>
       <v-card-text class="pa-2">
