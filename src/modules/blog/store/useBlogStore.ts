@@ -7,5 +7,12 @@ export const useBlogStore = defineStore('blog', () => {
   const posts = ref<PostWithProfile[]>([])
   const comments = ref<CommentWithProfile[]>([])
 
-  return { posts, comments }
+  const $resetPosts = () => {
+    posts.value = []
+  }
+  const $resetComments = () => {
+    comments.value = []
+  }
+
+  return { posts, comments, $resetPosts, $resetComments }
 })
