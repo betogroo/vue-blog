@@ -50,6 +50,7 @@ const editPost = async (post: Post) => {
   try {
     const data = await _editPost(post)
     if (!data) throw Error('Não foi possível Editar.')
+    blogStore.$resetPosts()
     await fetchPosts()
     toggleDialog('')
   } catch (error) {

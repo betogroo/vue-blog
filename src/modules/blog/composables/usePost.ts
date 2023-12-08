@@ -32,10 +32,8 @@ const usePost = () => {
         .select('id, title, text, created_at, profiles(id, username)')
         .order('created_at', { ascending: false })
         .returns<PostWithProfile[]>()
-
       if (err) throw err
       if (data) {
-        console.log('fetiou')
         const parsedData = PostsWithProfileSchema.parse(data)
         posts.value = parsedData
         blogStore.posts = parsedData
