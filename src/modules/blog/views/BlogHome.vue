@@ -10,6 +10,7 @@ import { type Post } from '../types/Blog'
 //reactive
 const indexPending = ref<number | string>(-1)
 const dialog = ref(false)
+const dialogAction = ref<string>('')
 
 // composable
 const {
@@ -26,7 +27,6 @@ const {
 // store
 const blogStore = useBlogStore()
 const profileStore = useProfileStore()
-const dialogAction = ref<string>('')
 
 const deletePost = async (id: number | string) => {
   indexPending.value = posts.value.findIndex((item) => item.id === id)
@@ -39,11 +39,6 @@ const deletePost = async (id: number | string) => {
   } catch (error) {
     console.error('deletePost', error)
   }
-}
-
-const toggleEditPost = async (id: number) => {
-  await getPost(id)
-  toggleDialog('editPost')
 }
 
 const editPost = async (post: Post) => {
@@ -71,6 +66,10 @@ const submitPost = async (post: Post) => {
   }
 }
 
+const toggleEditPost = async (id: number) => {
+  await getPost(id)
+  toggleDialog('editPost')
+}
 const toggleDialog = (action: string) => {
   dialogAction.value = action
   dialog.value = !dialog.value
