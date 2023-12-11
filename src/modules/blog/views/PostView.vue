@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { PostCard, CommentCard, CommentForm } from '../components'
 import { useBlogStore } from '../store/useBlogStore'
 import { useProfileStore } from '@/modules/auth/store/useProfileStore'
-import type { Comment } from '../types/Blog'
+import type { Comment, Post } from '../types/Blog'
 import { ref } from 'vue'
 
 const props = defineProps<Props>()
@@ -50,9 +50,9 @@ const deletePost = async (id: number) => {
   }
 }
 
-const editPost = async (id: number | any) => {
+const editPost = async (post: Post) => {
   indexPending.value = 0
-  await _editPost(id)
+  await _editPost(post)
 }
 const editComment = async (id: number | string) => {
   indexPending.value = blogStore.comments.findIndex((item) => item.id === id)
@@ -93,7 +93,7 @@ await fetchComments(props.id)
       :post="post"
       :user_id="profileStore.userProfile.id"
       @handle-delete="deletePost(id)"
-      @handle-edit="editPost(id)"
+      @handle-edit="editPost(post)"
     />
     <CommentForm
       :is-pending="indexPending === 0 && commentPending === 'addComment'"
