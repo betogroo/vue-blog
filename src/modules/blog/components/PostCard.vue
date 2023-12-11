@@ -22,7 +22,7 @@ const emit = defineEmits<{
   handleEdit: [id: number | string]
 }>()
 
-const { id, title, created_at, text, profiles } = toRefs(props.post)
+const { id, title, created_at, text, profiles, updated_at } = toRefs(props.post)
 const { timestampToDate } = useHelpers()
 const { limitText, paragraph } = useText()
 
@@ -65,7 +65,11 @@ const handleEdit = (id: number | string) => {
       <v-row no-gutters>
         <v-col>
           <v-card-subtitle
-            >{{ timestampToDate(created_at!) }} por {{ profiles.username }}
+            >Criado em {{ timestampToDate(created_at!) }} por
+            {{ profiles.username }}
+            <span v-if="updated_at">
+              - editado em {{ timestampToDate(updated_at!) }}
+            </span>
           </v-card-subtitle>
         </v-col>
       </v-row>

@@ -101,6 +101,7 @@ const usePost = () => {
   }
 
   const editPost = async (post: Post) => {
+    const updated_at = new Date()
     try {
       await feedbackStore.clearErrorAndSetPending('editPost', true)
       const { data, error } = await supabase
@@ -108,6 +109,7 @@ const usePost = () => {
         .update({
           title: post.title,
           text: post.text,
+          updated_at,
         })
         .eq('id', post.id)
         .select()
