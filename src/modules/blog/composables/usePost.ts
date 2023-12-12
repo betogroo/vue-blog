@@ -58,6 +58,8 @@ const usePost = () => {
       if (data) {
         const parsedData = PostWithProfileSchema.parse(data)
         post.value = parsedData
+        blogStore.post = parsedData
+
         return data
       }
     } catch (err) {

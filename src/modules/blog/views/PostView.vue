@@ -60,8 +60,9 @@ const deletePost = async (id: number) => {
 const editPost = async (post: Post) => {
   try {
     const data = await _editPost(post)
-    if (!data) throw Error('Não foi possível Editar.')
-    await getPost(post.id!)
+    if (!data || !post.id) throw Error('Não foi possível Editar.')
+    blogStore.$resetPost()
+    await getPost(post.id)
     toggleDialog('')
   } catch (error) {
     console.log(error)
@@ -109,11 +110,11 @@ await fetchComments(props.id)
 </script>
 
 <template>
-  <v-container v-if="post">
+  <v-container v-if="blogStore.post">
     <PostForm
       v-if="editMode"
       :is-pending="postPending"
-      :post="post"
+      :post="blogStore.post"
       @submit-post="(post) => editPost(post)"
     />
     <template v-else>
@@ -121,7 +122,7 @@ await fetchComments(props.id)
         :index-pending="indexPending === 0"
         :is-complete="true"
         :is-pending="postPending"
-        :post="post"
+        :post="blogStore.post"
         :user_id="profileStore.userProfile.id"
         @handle-delete="deletePost(id)"
         @handle-edit="(id) => toggleEditPost(+id)"
@@ -139,7 +140,7 @@ await fetchComments(props.id)
         :comment="comment"
         :index-pending="indexPending === i"
         :is-pending="commentPending"
-        :post="post"
+        :post="blogStore.post"
         :post_id="id"
         :user_id="profileStore.userProfile.id"
         @handle-delete="(id) => deleteComment(comment.id!)"
