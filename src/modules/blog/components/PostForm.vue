@@ -41,6 +41,7 @@ const onSubmit = handleSubmit(async () => {
       <v-col cols="12">
         <v-textarea
           v-model="text.value.value"
+          auto-grow
           clearable
           :counter="5000"
           :error-messages="text.errorMessage.value"
