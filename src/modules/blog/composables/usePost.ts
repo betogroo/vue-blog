@@ -24,6 +24,7 @@ const usePost = () => {
   const { error, isPending } = storeToRefs(feedbackStore)
 
   const fetchPosts = async () => {
+    // blogStore.posts = []
     try {
       await feedbackStore.clearErrorAndSetPending('fetchPosts')
       const { data, error: err } = await supabase
@@ -31,7 +32,6 @@ const usePost = () => {
         .select('id, title, text, created_at, profiles(id, username)')
         .order('created_at', { ascending: false })
         .returns<PostWithProfile[]>()
-
       if (err) throw err
       if (data) {
         const parsedData = PostsWithProfileSchema.parse(data)
@@ -50,15 +50,17 @@ const usePost = () => {
       await feedbackStore.clearErrorAndSetPending('getPost')
       const { data, error: err } = await supabase
         .from('post')
-        .select('id, title, text, created_at, profiles(id, username)')
+        .select('*, profiles(id, username)')
         .eq('id', id)
         .returns<PostWithProfile[]>()
         .single()
       if (err) throw err
-      console.log(data)
       if (data) {
         const parsedData = PostWithProfileSchema.parse(data)
         post.value = parsedData
+        blogStore.post = parsedData
+
+        return data
       }
     } catch (err) {
       feedbackStore.error = handleError(err)
@@ -100,10 +102,22 @@ const usePost = () => {
     }
   }
 
-  const editPost = async (id: number) => {
+  const editPost = async (post: Post) => {
+    const updated_at = new Date()
     try {
       await feedbackStore.clearErrorAndSetPending('editPost', true)
-      console.log(id)
+      const { data, error } = await supabase
+        .from('post')
+        .update({
+          title: post.title,
+          text: post.text,
+          updated_at,
+        })
+        .eq('id', post.id)
+        .select()
+        .returns<Post>()
+      if (error) throw error
+      return data
     } catch (err) {
       feedbackStore.error = handleError(err)
     } finally {

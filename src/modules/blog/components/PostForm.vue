@@ -3,8 +3,9 @@ import { type Post, validationPostSchema } from '../types/Blog'
 import { useField, useForm } from 'vee-validate'
 interface Props {
   isPending?: string | boolean
+  post?: Post
 }
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   isPending: false,
 })
 
@@ -14,6 +15,7 @@ const emit = defineEmits<{
 
 const { values, handleSubmit, meta } = useForm<Post>({
   validationSchema: validationPostSchema,
+  initialValues: props.post ? props.post : undefined,
 })
 
 const title = useField('title', validationPostSchema)
@@ -39,6 +41,7 @@ const onSubmit = handleSubmit(async () => {
       <v-col cols="12">
         <v-textarea
           v-model="text.value.value"
+          auto-grow
           clearable
           :counter="5000"
           :error-messages="text.errorMessage.value"
@@ -52,7 +55,7 @@ const onSubmit = handleSubmit(async () => {
           class="text-right"
           color="black"
           :disabled="!meta.valid"
-          :loading="isPending === 'addPost'"
+          :loading="isPending === 'addPost' || isPending === 'editPost'"
           type="submit"
           >Enviar</v-btn
         >
